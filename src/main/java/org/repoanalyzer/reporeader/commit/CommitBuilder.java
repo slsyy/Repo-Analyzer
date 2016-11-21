@@ -21,7 +21,7 @@ public class CommitBuilder {
         return this;
     }
 
-    public CommitBuilder setDate(DateTime date) {
+    public CommitBuilder setDate(DateTime dateTime) {
         this.dateTime = dateTime;
         return this;
     }
