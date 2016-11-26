@@ -6,27 +6,62 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.stage.Stage;
+import org.repoanalyzer.reporeader.IRepoReader;
+import org.repoanalyzer.reporeader.commit.Author;
+import org.repoanalyzer.reporeader.commit.Commit;
+import org.repoanalyzer.statisticsprovider.MockedRepoReader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jakub on 2016-11-26.
  */
 public class CommitStatisticStage {
+
+    //TODO Move to model
+    //TODO Refactor me pls
+    final IRepoReader repoReader;
+    public CommitStatisticStage() {
+        this.repoReader = new MockedRepoReader("uerel");
+    }
+
+    private List<PieChart.Data> calculateStatistic() {
+        List<PieChart.Data> data = new ArrayList<PieChart.Data>();
+
+        List<Commit> commits = repoReader.getCommits();
+        List<Author> authors = new ArrayList<Author>();
+
+        for(Commit commit: commits){
+            if(!authors.contains(commit.getAuthor())){
+                authors.add(commit.getAuthor());
+            }
+        }
+
+        for(Author author: authors){
+            int authorCommitsNumber = 0;
+            for(Commit commit: commits){
+                if(author.equals(commit.getAuthor())) {
+                    authorCommitsNumber++;
+                }
+            }
+            data.add(new PieChart.Data(author.getName(), authorCommitsNumber));
+        }
+        return data;
+    }
+
     public void showStage(Stage stage) throws Exception {
         Scene scene = new Scene(new Group());
         stage.setTitle("Commits statistic");
-        stage.setWidth(400);
-        stage.setHeight(400);
+        stage.setWidth(500);
+        stage.setHeight(500);
+
 
         ObservableList<PieChart.Data> pieChartData =
-                FXCollections.observableArrayList(
-                        new PieChart.Data("mateo123", 13),
-                        new PieChart.Data("cris123", 25),
-                        new PieChart.Data("pablo123", 10),
-                        new PieChart.Data("jacob123", 22),
-                        new PieChart.Data("paolo123", 30));
+                FXCollections.observableArrayList(calculateStatistic());
         final PieChart chart = new PieChart(pieChartData);
-        chart.setMaxWidth(350);
-        chart.setMaxHeight(350);
+        chart.setMaxWidth(500);
+        chart.setMaxHeight(500);
         chart.setTitle("Commits");
 
         ((Group) scene.getRoot()).getChildren().add(chart);
