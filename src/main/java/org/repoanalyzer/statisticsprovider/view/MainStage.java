@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 /**
  * Created by Jakub on 2016-11-26.
  */
-public class MainStage extends Application{
+public class    MainStage extends Application{
     public void start(final Stage primaryStage) throws Exception {
         primaryStage.setTitle("RepoAnalyzer");
         final TextField urlText = new TextField();
