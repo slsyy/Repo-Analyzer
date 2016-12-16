@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface IRepoReader {
     List<Commit> getCommits();
+    Progress getProgress();
 }
