@@ -1,9 +1,16 @@
 package org.repoanalyzer.reporeader.commit;
 
-
 import org.joda.time.DateTime;
 
 final public class Commit {
+
+    private final String hashCode;
+    private final Author author;
+    private final DateTime dateTime;
+    private final String message;
+    private final int deletedLinesNumber;
+    private final int addedLinesNumber;
+    private final int changedLinesNumber;
 
     Commit(String hashCode, Author author, DateTime dateTime, String message, int deletedLinesNumber, int addedLinesNumber, int changedLinesNumber) {
         this.hashCode = hashCode;
@@ -55,13 +62,4 @@ final public class Commit {
                 ", changedLinesNumber=" + changedLinesNumber +
                 '}';
     }
-
-    private final String hashCode;
-    private final Author author;
-    private final DateTime dateTime;
-    private final String message;
-    private final int deletedLinesNumber;
-    private final int addedLinesNumber;
-    private final int changedLinesNumber;
-
 }

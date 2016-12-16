@@ -10,6 +10,18 @@ public class CommitBuilder {
     private int deletedLinesNumber;
     private int addedLinesNumber;
     private int changedLinesNumber;
+    private AuthorProvider authorProvider;
+
+    public CommitBuilder(){
+    }
+
+    public CommitBuilder(AuthorProvider authorProvider){
+        this.authorProvider = authorProvider;
+    }
+
+    public CommitBuilder setAuthorName(String name){
+        return this;
+    }
 
     public CommitBuilder setHashCode(String hashCode) {
         this.hashCode = hashCode;
