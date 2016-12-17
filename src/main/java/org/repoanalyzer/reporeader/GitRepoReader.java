@@ -26,65 +26,8 @@ public class GitRepoReader extends AbstractRepoReader{
     public GitRepoReader(String url){
         super(url);
     }
-
-    public List<Commit> getCommits(){
-        this.progress = new AtomicInteger();
-
-        FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        builder.setGitDir(new File(this.url))
-                .readEnvironment()
-                .findGitDir();
-        Repository repository = null;
-
-        try {
-            repository = builder.build();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Git git = new Git(repository);
-        Iterable<RevCommit> commits = null;
-
-        try {
-            commits = git.log().call();
-        } catch (GitAPIException e) {
-            e.printStackTrace();
-        }
-
-        size = 0;
-        for(RevCommit commit : commits) size++;
-
-        try {
-            commits = git.log().call();
-        } catch (GitAPIException e) {
-            e.printStackTrace();
-        }
-
-        List<Commit> result = new LinkedList<>();
-        AuthorProvider authorProvider = new AuthorProvider();
-        CommitBuilder commitBuilder = new CommitBuilder(authorProvider);
-
-        for(RevCommit commit : commits){
-            this.progress.incrementAndGet();
-
-            commitBuilder.setHashCode(commit.getName());
-            commitBuilder.setMessage(commit.getFullMessage());
-            commitBuilder.setDate(new DateTime(((long) commit.getCommitTime()) * 1000));
-            commitBuilder.setAuthorName(commit.getCommitterIdent().getName());
-            commitBuilder.setAuthorEmail(commit.getCommitterIdent().getEmailAddress());
-
-            commitBuilder.setAuthor(null);
-            commitBuilder.setAddedLinesNumber(0);
-            commitBuilder.setDeletedLinesNumber(0);
-            commitBuilder.setChangedLinesNumber(0);
-
-            result.add(commitBuilder.createCommit());
-        }
-
-        return result;
-    }
-
-    public Future<List<Commit>> getFutureCommits(){
+    
+    public Future<List<Commit>> getCommits(){
         this.progress = new AtomicInteger();
 
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
@@ -160,7 +103,7 @@ public class GitRepoReader extends AbstractRepoReader{
 
     public static void main(String[] args){
         GitRepoReader repoReader = new GitRepoReader("/home/linux/Desktop/Repo-Analyzer/.git");
-        Future<List<Commit>> future = repoReader.getFutureCommits();
+        Future<List<Commit>> future = repoReader.getCommits();
 
         while(!future.isDone()) {
             System.out.println(repoReader.getProgress().getProgressFraction());

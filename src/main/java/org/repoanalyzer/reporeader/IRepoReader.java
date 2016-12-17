@@ -3,8 +3,9 @@ package org.repoanalyzer.reporeader;
 import org.repoanalyzer.reporeader.commit.Commit;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 public interface IRepoReader {
-    List<Commit> getCommits();
+    Future<List<Commit>> getCommits();
     Progress getProgress();
 }
