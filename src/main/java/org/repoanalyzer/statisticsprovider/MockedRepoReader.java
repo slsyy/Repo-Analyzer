@@ -4,11 +4,16 @@ package org.repoanalyzer.statisticsprovider;
 import com.github.javafaker.Faker;
 import org.joda.time.DateTime;
 import org.repoanalyzer.reporeader.AbstractRepoReader;
+import org.repoanalyzer.reporeader.Progress;
 import org.repoanalyzer.reporeader.commit.Author;
 import org.repoanalyzer.reporeader.commit.Commit;
 import org.repoanalyzer.reporeader.commit.CommitBuilder;
 
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 public class MockedRepoReader extends AbstractRepoReader {
@@ -50,7 +55,19 @@ public class MockedRepoReader extends AbstractRepoReader {
         }
     }
 
-    public List<Commit> getCommits() {
-        return commits;
+    public Future<List<Commit>> getCommits() {
+        Callable<List<Commit>> task = () -> {
+            return commits;
+        };
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<List<Commit>> future = executor.submit(task);
+        executor.shutdown();
+
+        return future;
+    }
+
+    public Progress getProgress() {
+        return null;
     }
 }

@@ -13,6 +13,8 @@ import org.repoanalyzer.statisticsprovider.MockedRepoReader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * Created by Jakub on 2016-11-26.
@@ -29,7 +31,16 @@ public class CommitStatisticStage {
     private List<PieChart.Data> calculateStatistic() {
         List<PieChart.Data> data = new ArrayList<PieChart.Data>();
 
-        List<Commit> commits = repoReader.getCommits();
+        Future<List<Commit>> future = repoReader.getCommits();
+
+        List<Commit> commits = null;
+        try {
+            commits = future.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         List<Author> authors = new ArrayList<Author>();
 
         for(Commit commit: commits){

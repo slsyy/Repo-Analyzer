@@ -1,7 +1,6 @@
 package org.repoanalyzer.reporeader;
 
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.LogCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -26,7 +25,7 @@ public class GitRepoReader extends AbstractRepoReader{
     public GitRepoReader(String url){
         super(url);
     }
-    
+
     public Future<List<Commit>> getCommits(){
         this.progress = new AtomicInteger();
 
@@ -83,7 +82,7 @@ public class GitRepoReader extends AbstractRepoReader{
 
                 result.add(commitBuilder.createCommit());
             }
-            Thread.sleep(5);
+
             return result;
         };
 
