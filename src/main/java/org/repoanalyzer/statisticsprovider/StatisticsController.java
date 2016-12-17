@@ -4,6 +4,7 @@ package org.repoanalyzer.statisticsprovider;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.repoanalyzer.reporeader.IRepoReader;
+import org.repoanalyzer.reporeader.RepoReaderFactory;
 import org.repoanalyzer.reporeader.commit.Commit;
 import org.repoanalyzer.statisticsprovider.component.CommitPercentageComponent;
 import org.repoanalyzer.statisticsprovider.component.HeatMapComponent;
@@ -28,7 +29,7 @@ public class StatisticsController extends Application {
     }
 
     public void createStatisticsView(String url){
-        repoReader = new MockedRepoReader(url);
+        repoReader = RepoReaderFactory.create(url);
         List<Commit> commits = null;
         try {
             commits = repoReader.getCommits().get();

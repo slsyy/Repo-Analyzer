@@ -33,7 +33,7 @@ public class CommitPercentageCalculator {
                     authorCommitsNumber++;
                 }
             }
-            data.add(new CommitPercentageData(author.getName(), authorCommitsNumber));
+            data.add(new CommitPercentageData(author.getFirstName(), authorCommitsNumber));
         }
         return data;
     }

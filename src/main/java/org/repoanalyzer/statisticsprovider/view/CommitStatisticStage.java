@@ -7,9 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.stage.Stage;
 import org.repoanalyzer.reporeader.IRepoReader;
+import org.repoanalyzer.reporeader.RepoReaderFactory;
 import org.repoanalyzer.reporeader.commit.Author;
 import org.repoanalyzer.reporeader.commit.Commit;
-import org.repoanalyzer.statisticsprovider.MockedRepoReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class CommitStatisticStage {
     //TODO Refactor me pls
     final IRepoReader repoReader;
     public CommitStatisticStage() {
-        this.repoReader = new MockedRepoReader("uerel");
+        this.repoReader = RepoReaderFactory.create("uerel");
     }
 
     private List<PieChart.Data> calculateStatistic() {
@@ -56,7 +56,7 @@ public class CommitStatisticStage {
                     authorCommitsNumber++;
                 }
             }
-            data.add(new PieChart.Data(author.getName(), authorCommitsNumber));
+            data.add(new PieChart.Data(author.getFirstName(), authorCommitsNumber));
         }
         return data;
     }
