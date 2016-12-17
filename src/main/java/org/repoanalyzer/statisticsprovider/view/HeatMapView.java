@@ -11,9 +11,7 @@ import javafx.stage.Stage;
 import org.repoanalyzer.statisticsprovider.data.Days;
 import org.repoanalyzer.statisticsprovider.data.HeatMapData;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Jakub on 2016-12-15.
@@ -21,8 +19,12 @@ import java.util.Map;
 public class HeatMapView {
 
     private List<HeatMapData> data;
-    private Integer numOfCommits;
-
+    private final Integer numOfCommits;
+    private final Color OVER_10 = Color.web("#ff0000");
+    private final Color OVER_7 = Color.web("#cc3333");
+    private final Color OVER_3 = Color.web("#b34d4d");
+    private final Color OVER_0 = Color.web("#996666");
+    private final Color ZERO = Color.web("#808080");
 
 
     public HeatMapView(List<HeatMapData> data, Integer numOfCommits) {
@@ -30,8 +32,7 @@ public class HeatMapView {
         this.numOfCommits = numOfCommits;
     }
 
-    public void showStage(){
-        Stage stage = new Stage();
+    public void showStage(Stage stage){
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 380, 150, Color.WHITE);
 
@@ -52,23 +53,55 @@ public class HeatMapView {
             gridpane.add(rect,data1.getHour()+1, data1.getDay().getNumber()+1);
         }
 
+        showDesription(gridpane);
+
         root.setCenter(gridpane);
-        stage.setWidth(1000);
+        stage.setWidth(800);
         stage.setHeight(300);
         stage.setScene(scene);
         stage.show();
     }
 
-    private Color chooseColor(Integer commits){
-        //TODO: more colors
+    private Color chooseColor(final Integer commits){
         if(commits == 0)
-            commits++;
-
-
-        if(numOfCommits/commits>30)
-            return Color.RED;
+            return ZERO;
+        Float percentage = commits/numOfCommits *100f;
+        if(percentage>10)
+            return OVER_10;
+        else if(percentage>7)
+            return OVER_7;
+        else if(percentage>3)
+            return OVER_3;
         else
-            return Color.GREEN;
+            return OVER_0;
+    }
+
+    private void showDesription(GridPane gridPane){
+        Rectangle rect = new Rectangle(20,20);
+        rect.setFill(OVER_10);
+        gridPane.add(rect,28, 2);
+        gridPane.add(new Text(">10%"),29,2);
+
+        Rectangle rect1 = new Rectangle(20,20);
+        rect1.setFill(OVER_7);
+        gridPane.add(rect1,28, 3);
+        gridPane.add(new Text(">7%"),29,3);
+
+        Rectangle rect2 = new Rectangle(20,20);
+        rect2.setFill(OVER_3);
+        gridPane.add(rect2,28, 4);
+        gridPane.add(new Text(">3%"),29,4);
+
+        Rectangle rect3 = new Rectangle(20,20);
+        rect3.setFill(OVER_0);
+        gridPane.add(rect3,28, 5);
+        gridPane.add(new Text(">0%"),29,5);
+
+        Rectangle rect4 = new Rectangle(20,20);
+        rect4.setFill(ZERO);
+        gridPane.add(rect4,28, 6);
+        gridPane.add(new Text("0%"),29,6);
+
     }
 }
 

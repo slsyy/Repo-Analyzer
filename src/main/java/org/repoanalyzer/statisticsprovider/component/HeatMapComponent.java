@@ -1,11 +1,10 @@
 package org.repoanalyzer.statisticsprovider.component;
 
 
+import javafx.stage.Stage;
 import org.repoanalyzer.reporeader.commit.Commit;
 import org.repoanalyzer.statisticsprovider.calculator.HeatMapCalculator;
-import org.repoanalyzer.statisticsprovider.calculator.RevertStatisticsCalculator;
 import org.repoanalyzer.statisticsprovider.view.HeatMapView;
-import org.repoanalyzer.statisticsprovider.view.RevertStatisticsView;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -28,7 +27,7 @@ public class HeatMapComponent extends AbstractStatisticsComponent{
     }
 
     public void createStatisticsView() {
-        // todo
+        this.view.showStage(new Stage());
     }
 
     public HeatMapView getView(){

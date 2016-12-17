@@ -7,8 +7,6 @@ import org.repoanalyzer.reporeader.IRepoReader;
 import org.repoanalyzer.reporeader.commit.Commit;
 import org.repoanalyzer.statisticsprovider.component.HeatMapComponent;
 import org.repoanalyzer.statisticsprovider.component.IStatisticsComponent;
-import org.repoanalyzer.statisticsprovider.view.ChangesStatisticStage;
-import org.repoanalyzer.statisticsprovider.view.CommitStatisticStage;
 import org.repoanalyzer.statisticsprovider.view.RepoPathReaderView;
 
 import java.util.List;
@@ -34,7 +32,7 @@ public class StatisticsController extends Application {
         HeatMapComponent component = new HeatMapComponent(commits);
 
         try {
-            component.getView().showStage();
+            component.createStatisticsView();
         } catch (Exception e) {
             e.printStackTrace();
         }
