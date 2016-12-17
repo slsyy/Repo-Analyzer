@@ -1,6 +1,7 @@
 package org.repoanalyzer.reporeader.commit;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class Author {
 
@@ -8,11 +9,14 @@ public class Author {
     private LinkedList<String> emails;
 
     public Author(String name, String email) {
+        this.names = new LinkedList<>();
+        this.emails = new LinkedList<>();
+
         this.names.add(name);
         this.emails.add(email);
     }
 
-    public LinkedList<String> getNames() {
+    public List<String> getNames() {
         return names;
     }
 
@@ -20,7 +24,7 @@ public class Author {
         return names.getFirst();
     }
 
-    public LinkedList<String> getEmails() {
+    public List<String> getEmails() {
         return emails;
     }
 
@@ -30,5 +34,10 @@ public class Author {
 
     public void addEmail(String email) {
         emails.add(email);
+    }
+
+    @Override
+    public String toString(){
+        return this.getFirstName();
     }
 }
