@@ -1,6 +1,5 @@
 package org.repoanalyzer.statisticsprovider.calculator;
 
-import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.repoanalyzer.reporeader.commit.Commit;
 import org.repoanalyzer.statisticsprovider.data.Days;
@@ -8,8 +7,6 @@ import org.repoanalyzer.statisticsprovider.data.HeatMapData;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 /**
  * Created by Jakub on 2016-12-15.
@@ -17,14 +14,8 @@ import java.util.concurrent.Future;
 public class HeatMapCalculator {
     private List<Commit> commits;
 
-    public HeatMapCalculator(Future<List<Commit>> commits) {
-        try {
-            this.commits = commits.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+    public HeatMapCalculator(List<Commit> commits) {
+        this.commits = commits;
     }
 
     public List<HeatMapData> generateData(){

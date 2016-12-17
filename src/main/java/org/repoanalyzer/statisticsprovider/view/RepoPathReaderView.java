@@ -1,6 +1,5 @@
 package org.repoanalyzer.statisticsprovider.view;
 
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -43,7 +42,8 @@ public class RepoPathReaderView {
                 if(true){
                     try {
                         controller.createStatisticsView(url);
-                        urlText.clear();
+                        // urlText.clear();
+                        stage.close();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

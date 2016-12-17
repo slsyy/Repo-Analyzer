@@ -7,23 +7,14 @@ import org.repoanalyzer.statisticsprovider.calculator.HeatMapCalculator;
 import org.repoanalyzer.statisticsprovider.view.HeatMapView;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 public class HeatMapComponent extends AbstractStatisticsComponent{
     private HeatMapView view;
     private HeatMapCalculator calculator;
 
-    public HeatMapComponent(Future<List<Commit>> commits) {
+    public HeatMapComponent(List<Commit> commits) {
         super(commits);
         calculator = new HeatMapCalculator(commits);
-        try {
-            view = new HeatMapView(calculator.generateData(), commits.get().size());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+        view = new HeatMapView(calculator.generateData(), commits.size());
     }
 
     public void createStatisticsView() {
