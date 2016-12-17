@@ -65,12 +65,12 @@ public class HeatMapView {
     private Color chooseColor(final Integer commits){
         if(commits == 0)
             return ZERO;
-        Float percentage = commits/numOfCommits *100f;
-        if(percentage>10)
+        Integer percentage = (commits*100)/numOfCommits;
+        if(percentage>=10)
             return OVER_10;
-        else if(percentage>7)
+        else if(percentage>=7)
             return OVER_7;
-        else if(percentage>3)
+        else if(percentage>=3)
             return OVER_3;
         else
             return OVER_0;
