@@ -94,7 +94,9 @@ public class GitRepoReader extends AbstractRepoReader{
     public Progress getProgress() {
         Progress progress = new Progress();
         progress.setState(this.state);
-        progress.setProgressFraction(((float) this.progress.get()) / this.size);
+        progress.setWorkDone(this.progress.get());
+        progress.setMax(this.size);
+        //progress.setProgressFraction(((float) this.progress.get()) / this.size);
         return progress;
     }
 
@@ -103,7 +105,7 @@ public class GitRepoReader extends AbstractRepoReader{
         Future<List<Commit>> future = repoReader.getCommits();
 
         while(!future.isDone()) {
-            System.out.println(repoReader.getProgress().getProgressFraction());
+            //System.out.println(repoReader.getProgress().getProgressFraction());
         }
 
         List<Commit> res = null;

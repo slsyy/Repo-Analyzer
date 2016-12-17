@@ -8,9 +8,7 @@ import org.repoanalyzer.statisticsprovider.data.HeatMapData;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Jakub on 2016-12-15.
- */
+
 public class HeatMapCalculator {
     private List<Commit> commits;
 
