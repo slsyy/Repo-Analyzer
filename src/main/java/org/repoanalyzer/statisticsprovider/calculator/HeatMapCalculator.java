@@ -8,6 +8,8 @@ import org.repoanalyzer.statisticsprovider.data.HeatMapData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * Created by Jakub on 2016-12-15.
@@ -15,8 +17,14 @@ import java.util.List;
 public class HeatMapCalculator {
     private List<Commit> commits;
 
-    public HeatMapCalculator(List<Commit> commits) {
-        this.commits = commits;
+    public HeatMapCalculator(Future<List<Commit>> commits) {
+        try {
+            this.commits = commits.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<HeatMapData> generateData(){
@@ -26,6 +34,7 @@ public class HeatMapCalculator {
                 result.add(new HeatMapData(day,i));
 
         Days day = null;
+
         for(Commit commit : commits){
             Integer hour  = commit.getDateTime().getHourOfDay();
             switch (commit.getDateTime().getDayOfWeek()){

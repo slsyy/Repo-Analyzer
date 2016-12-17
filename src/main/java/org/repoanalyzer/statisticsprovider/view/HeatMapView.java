@@ -61,6 +61,10 @@ public class HeatMapView {
 
     private Color chooseColor(Integer commits){
         //TODO: more colors
+        if(commits == 0)
+            commits++;
+
+
         if(numOfCommits/commits>30)
             return Color.RED;
         else
