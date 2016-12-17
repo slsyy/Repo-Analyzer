@@ -4,12 +4,15 @@ import org.joda.time.DateTime;
 
 public class CommitBuilder {
     private String hashCode;
-    private Author author;
     private DateTime dateTime;
     private String message;
     private int deletedLinesNumber;
     private int addedLinesNumber;
     private int changedLinesNumber;
+
+    private String authorName;
+    private String authorEmail;
+    private Author author;
     private AuthorProvider authorProvider;
 
     public CommitBuilder(){
@@ -19,7 +22,13 @@ public class CommitBuilder {
         this.authorProvider = authorProvider;
     }
 
-    public CommitBuilder setAuthorName(String name){
+    public CommitBuilder setAuthorName(String authorName){
+        this.authorName = authorName;
+        return this;
+    }
+
+    public CommitBuilder setAuthorEmail(String authorEmail){
+        this.authorEmail = authorEmail;
         return this;
     }
 

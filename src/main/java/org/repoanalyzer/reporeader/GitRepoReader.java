@@ -1,6 +1,7 @@
 package org.repoanalyzer.reporeader;
 
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.LogCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -15,67 +16,167 @@ import org.repoanalyzer.reporeader.commit.CommitBuilder;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GitRepoReader extends AbstractRepoReader{
+    private int size;
+    private AtomicInteger progress;
 
     public GitRepoReader(String url){
         super(url);
     }
 
     public List<Commit> getCommits(){
+        this.progress = new AtomicInteger();
+
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
+        builder.setGitDir(new File(this.url))
+                .readEnvironment()
+                .findGitDir();
         Repository repository = null;
+
         try {
-            repository = builder.setGitDir(new File(this.url))
-                    .readEnvironment()
-                    .findGitDir()
-                    .build();
+            repository = builder.build();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         Git git = new Git(repository);
         Iterable<RevCommit> commits = null;
+
         try {
             commits = git.log().call();
         } catch (GitAPIException e) {
             e.printStackTrace();
         }
 
-        List<Commit> result = new LinkedList<Commit>();
+        size = 0;
+        for(RevCommit commit : commits) size++;
+
+        try {
+            commits = git.log().call();
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+
+        List<Commit> result = new LinkedList<>();
         AuthorProvider authorProvider = new AuthorProvider();
         CommitBuilder commitBuilder = new CommitBuilder(authorProvider);
 
         for(RevCommit commit : commits){
-            commitBuilder.setHashCode("abc");
-            commitBuilder.setAuthor(null);
+            this.progress.incrementAndGet();
+
+            commitBuilder.setHashCode(commit.getName());
             commitBuilder.setMessage(commit.getFullMessage());
             commitBuilder.setDate(new DateTime(((long) commit.getCommitTime()) * 1000));
+            commitBuilder.setAuthorName(commit.getCommitterIdent().getName());
+            commitBuilder.setAuthorEmail(commit.getCommitterIdent().getEmailAddress());
 
-
+            commitBuilder.setAuthor(null);
             commitBuilder.setAddedLinesNumber(0);
             commitBuilder.setDeletedLinesNumber(0);
             commitBuilder.setChangedLinesNumber(0);
 
             result.add(commitBuilder.createCommit());
-
-//            System.out.println(commit.getId());
-//            System.out.println(commit.getCommitterIdent().getName());
-//            System.out.println(commit.getCommitterIdent().getEmailAddress());
-        }
-
-        for(Commit commit : result){
-            System.out.println(commit + "\n");
         }
 
         return result;
     }
 
+    public Future<List<Commit>> getFutureCommits(){
+        this.progress = new AtomicInteger();
+
+        FileRepositoryBuilder builder = new FileRepositoryBuilder();
+        builder.setGitDir(new File(this.url))
+                .readEnvironment()
+                .findGitDir();
+        Repository repository = null;
+
+        try {
+            repository = builder.build();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Git git = new Git(repository);
+        Iterable<RevCommit> commits = null;
+
+        try {
+            commits = git.log().call();
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+
+        size = 0;
+        for(RevCommit commit : commits) size++;
+
+        try {
+            commits = git.log().call();
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+
+        final Iterable<RevCommit> finalCommits = commits;
+
+        Callable<List<Commit>> task = () -> {
+            List<Commit> result = new LinkedList<>();
+            AuthorProvider authorProvider = new AuthorProvider();
+            CommitBuilder commitBuilder = new CommitBuilder(authorProvider);
+
+            for(RevCommit commit : finalCommits){
+                this.progress.incrementAndGet();
+
+                commitBuilder.setHashCode(commit.getName());
+                commitBuilder.setMessage(commit.getFullMessage());
+                commitBuilder.setDate(new DateTime(((long) commit.getCommitTime()) * 1000));
+                commitBuilder.setAuthorName(commit.getCommitterIdent().getName());
+                commitBuilder.setAuthorEmail(commit.getCommitterIdent().getEmailAddress());
+
+                commitBuilder.setAuthor(null);
+                commitBuilder.setAddedLinesNumber(0);
+                commitBuilder.setDeletedLinesNumber(0);
+                commitBuilder.setChangedLinesNumber(0);
+
+                result.add(commitBuilder.createCommit());
+            }
+            Thread.sleep(5);
+            return result;
+        };
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<List<Commit>> future = executor.submit(task);
+        executor.shutdown();
+
+        return future;
+    }
+
     public Progress getProgress() {
-        return null;
+        Progress progress = new Progress();
+        progress.setState("read");
+        progress.setProgressFraction(((float) this.progress.get()) / this.size);
+        return progress;
     }
 
     public static void main(String[] args){
-        new GitRepoReader("/home/linux/Desktop/Repo-Analyzer/.git").getCommits();
+        GitRepoReader repoReader = new GitRepoReader("/home/linux/Desktop/Repo-Analyzer/.git");
+        Future<List<Commit>> future = repoReader.getFutureCommits();
+
+        while(!future.isDone()) {
+            System.out.println(repoReader.getProgress().getProgressFraction());
+        }
+
+        List<Commit> res = null;
+        try {
+            res = future.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        for(Commit commit : res){
+            System.out.println(commit + "\n");
+        }
     }
 }
