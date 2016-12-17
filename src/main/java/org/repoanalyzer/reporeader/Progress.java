@@ -17,7 +17,14 @@ public class Progress {
         return state;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setState(char state) {
+        if (state == 'P')
+            this.state = "Pending for request.";
+        else if (state == 'R')
+            this.state = "Reading from repository...";
+        else if (state == 'T')
+            this.state = "Preparing commits...";
+        else
+            this.state = "Unknown state.";
     }
 }

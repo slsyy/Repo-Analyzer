@@ -19,20 +19,19 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GitRepoReader extends AbstractRepoReader{
-    private int size;
-    private AtomicInteger progress;
-
     public GitRepoReader(String url){
         super(url);
+        this.state = 'P';
     }
 
     public Future<List<Commit>> getCommits(){
+        this.state = 'R';
         this.progress = new AtomicInteger();
 
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         builder.setGitDir(new File(this.url))
-                .readEnvironment()
-                .findGitDir();
+               .readEnvironment()
+               .findGitDir();
         Repository repository = null;
 
         try {
@@ -50,8 +49,8 @@ public class GitRepoReader extends AbstractRepoReader{
             e.printStackTrace();
         }
 
-        size = 0;
-        for(RevCommit commit : commits) size++;
+        this.size = 0;
+        for(RevCommit commit : commits) this.size++;
 
         try {
             commits = git.log().call();
@@ -61,31 +60,30 @@ public class GitRepoReader extends AbstractRepoReader{
 
         final Iterable<RevCommit> finalCommits = commits;
 
+        this.state = 'T';
         Callable<List<Commit>> task = () -> {
             List<Commit> result = new LinkedList<>();
             AuthorProvider authorProvider = new AuthorProvider();
-            CommitBuilder commitBuilder = new CommitBuilder(authorProvider);
 
             for(RevCommit commit : finalCommits){
                 this.progress.incrementAndGet();
 
-                commitBuilder.setHashCode(commit.getName());
-                commitBuilder.setMessage(commit.getFullMessage());
-                commitBuilder.setDate(new DateTime(((long) commit.getCommitTime()) * 1000));
-                commitBuilder.setAuthorName(commit.getCommitterIdent().getName());
-                commitBuilder.setAuthorEmail(commit.getCommitterIdent().getEmailAddress());
-
-                commitBuilder.setAuthor(null);
-                commitBuilder.setAddedLinesNumber(0);
-                commitBuilder.setDeletedLinesNumber(0);
-                commitBuilder.setChangedLinesNumber(0);
-
-                result.add(commitBuilder.createCommit());
+                CommitBuilder commitBuilder = new CommitBuilder(authorProvider,
+                                                                commit.getCommitterIdent().getName(),
+                                                                commit.getCommitterIdent().getEmailAddress(),
+                                                                commit.getName(),
+                                                                new DateTime(((long) commit.getCommitTime()) * 1000),
+                                                                commit.getFullMessage());
+                result.add(commitBuilder.setAddedLinesNumber(0)
+                                        .setDeletedLinesNumber(0)
+                                        .setChangedLinesNumber(0)
+                                        .createCommit());
             }
 
             return result;
         };
 
+        this.state = 'P';
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<List<Commit>> future = executor.submit(task);
         executor.shutdown();
@@ -95,7 +93,7 @@ public class GitRepoReader extends AbstractRepoReader{
 
     public Progress getProgress() {
         Progress progress = new Progress();
-        progress.setState("read");
+        progress.setState(this.state);
         progress.setProgressFraction(((float) this.progress.get()) / this.size);
         return progress;
     }

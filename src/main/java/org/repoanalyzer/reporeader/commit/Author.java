@@ -1,20 +1,34 @@
 package org.repoanalyzer.reporeader.commit;
 
+import java.util.LinkedList;
 
-final public class Author {
+public class Author {
+
+    private LinkedList<String> names;
+    private LinkedList<String> emails;
+
     public Author(String name, String email) {
-        this.name = name;
-        this.email = email;
+        this.names.add(name);
+        this.emails.add(email);
     }
 
-    public String getName() {
-        return name;
+    public LinkedList<String> getNames() {
+        return names;
     }
 
-    public String getEmail() {
-        return email;
+    public String getFirstName() {
+        return names.getFirst();
     }
 
-    final private String name;
-    final private String email;
+    public LinkedList<String> getEmails() {
+        return emails;
+    }
+
+    public void addName(String name) {
+        names.add(name);
+    }
+
+    public void addEmail(String email) {
+        emails.add(email);
+    }
 }
