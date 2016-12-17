@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class GitRepoReader extends AbstractRepoReader{
     public GitRepoReader(String url){
-        super(url);
+        super(new File(url, ".git").toString());
         this.state = 'P';
     }
 
