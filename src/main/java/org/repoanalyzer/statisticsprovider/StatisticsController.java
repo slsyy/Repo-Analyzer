@@ -7,9 +7,9 @@ import javafx.stage.Stage;
 import org.repoanalyzer.reporeader.IRepoReader;
 import org.repoanalyzer.reporeader.RepoReaderFactory;
 import org.repoanalyzer.reporeader.commit.Commit;
-import org.repoanalyzer.statisticsprovider.component.CommitPercentageComponent;
-import org.repoanalyzer.statisticsprovider.component.HeatMapComponent;
-import org.repoanalyzer.statisticsprovider.component.IStatisticsComponent;
+import org.repoanalyzer.statisticsprovider.calculator.BalanceAddDeleteCalculator;
+import org.repoanalyzer.statisticsprovider.component.*;
+import org.repoanalyzer.statisticsprovider.data.RevertStatisticsData;
 import org.repoanalyzer.statisticsprovider.view.RepoPathReaderView;
 import org.repoanalyzer.statisticsprovider.view.RepoReaderProgressBarView;
 
@@ -82,10 +82,14 @@ public class StatisticsController extends Application {
 
         HeatMapComponent heatMapComponent = new HeatMapComponent(commits);
         CommitPercentageComponent commitPercentageComponent = new CommitPercentageComponent(commits);
+        BalanceAddDeleteComponent balanceAddDeleteComponent = new BalanceAddDeleteComponent(commits);
+        RevertStatisticsComponent revertStatisticsComponent = new RevertStatisticsComponent(commits);
 
         try {
             heatMapComponent.createStatisticsView();
             commitPercentageComponent.createStatisticsView();
+            balanceAddDeleteComponent.createStatisticsView();
+            revertStatisticsComponent.createStatisticsView();
         } catch (Exception e) {
             e.printStackTrace();
         }
