@@ -4,18 +4,27 @@ package org.repoanalyzer.statisticsprovider.data;
 import org.repoanalyzer.reporeader.commit.Author;
 import org.repoanalyzer.reporeader.commit.Commit;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class RevertStatisticsData {
-    public List<Commit> commits;
-    public Map<Author, Float> authorToRevertsPersentage;
+    private Author author;
+    private Float percentage;
 
-    public RevertStatisticsData(List<Commit> commits){
-        this.commits = commits;
+    public RevertStatisticsData(Author author){
+        this.author = author;
     }
 
-    public Map<Author, Float> getData(){
-        return authorToRevertsPersentage;
+    public Float getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(Float percentage) {
+        this.percentage = percentage;
+    }
+
+    public Author getAuthor() {
+        return author;
     }
 }

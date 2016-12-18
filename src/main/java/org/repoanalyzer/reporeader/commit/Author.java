@@ -42,6 +42,10 @@ public class Author {
         commits.add(commit);
     }
 
+    public LinkedList<Commit> getCommits() {
+        return commits;
+    }
+
     @Override
     public String toString(){
         return this.getFirstName();
