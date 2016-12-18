@@ -39,6 +39,8 @@ public class CommitBuilder {
     }
 
     public Commit createCommit() {
-        return new Commit(hashCode, author, dateTime, message, deletedLinesNumber, addedLinesNumber, changedLinesNumber);
+        Commit commit = new Commit(hashCode, author, dateTime, message, deletedLinesNumber, addedLinesNumber, changedLinesNumber);
+        author.addCommit(commit);
+        return commit;
     }
 }

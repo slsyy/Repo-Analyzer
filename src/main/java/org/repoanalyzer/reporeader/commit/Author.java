@@ -7,10 +7,12 @@ public class Author {
 
     private LinkedList<String> names;
     private LinkedList<String> emails;
+    private LinkedList<Commit> commits;
 
     public Author(String name, String email) {
         this.names = new LinkedList<>();
         this.emails = new LinkedList<>();
+        this.commits = new LinkedList<>();
 
         this.names.add(name);
         this.emails.add(email);
@@ -34,6 +36,10 @@ public class Author {
 
     public void addEmail(String email) {
         emails.add(email);
+    }
+
+    public void addCommit(Commit commit) {
+        commits.add(commit);
     }
 
     @Override

@@ -21,11 +21,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GitRepoReader extends AbstractRepoReader{
     public GitRepoReader(String url){
         super(new File(url, ".git").toString());
-        this.state = 'P';
+//        this.state = 'P';
     }
 
     public Future<List<Commit>> getCommits(){
-        this.state = 'R';
+//        this.state = 'R';
         this.progress = new AtomicInteger();
 
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
@@ -83,7 +83,7 @@ public class GitRepoReader extends AbstractRepoReader{
             return result;
         };
 
-        this.state = 'P';
+//        this.state = 'P';
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<List<Commit>> future = executor.submit(task);
         executor.shutdown();
@@ -93,7 +93,7 @@ public class GitRepoReader extends AbstractRepoReader{
 
     public Progress getProgress() {
         Progress progress = new Progress();
-        progress.setState(this.state);
+//        progress.setState(this.state);
         progress.setWorkDone(this.progress.get());
         progress.setMax(this.size);
         //progress.setProgressFraction(((float) this.progress.get()) / this.size);
