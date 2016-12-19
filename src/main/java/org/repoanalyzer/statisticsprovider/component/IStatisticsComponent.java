@@ -2,5 +2,5 @@ package org.repoanalyzer.statisticsprovider.component;
 
 
 public interface IStatisticsComponent {
-    void createStatisticsView();
+    void createAndShowStatisticsView();
 }

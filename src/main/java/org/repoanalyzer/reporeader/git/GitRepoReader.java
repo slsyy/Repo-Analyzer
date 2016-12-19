@@ -1,10 +1,13 @@
-package org.repoanalyzer.reporeader;
+package org.repoanalyzer.reporeader.git;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.repoanalyzer.reporeader.AbstractRepoReader;
+import org.repoanalyzer.reporeader.Progress;
+import org.repoanalyzer.reporeader.RepositoryNotFoundOrInvalidException;
 import org.repoanalyzer.reporeader.commit.AuthorProvider;
 import org.repoanalyzer.reporeader.commit.Commit;
 
@@ -18,13 +21,13 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class GitRepoReader extends AbstractRepoReader{
+public class GitRepoReader extends AbstractRepoReader {
     public GitRepoReader(String url){
         super(new File(url, ".git").toString());
 //        this.state = 'P';
     }
 
-    public Future<List<Commit>> getCommits(){
+    public Future<List<Commit>> getCommits() throws RepositoryNotFoundOrInvalidException {
 //        this.state = 'R';
         this.progress = new AtomicInteger();
 
@@ -36,17 +39,17 @@ public class GitRepoReader extends AbstractRepoReader{
 
         try {
             repository = builder.build();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            throw new RepositoryNotFoundOrInvalidException();
         }
 
         Git git = new Git(repository);
-        Iterable<RevCommit> commits = null;
 
+        Iterable<RevCommit> commits = null;
         try {
             commits = git.log().call();
-        } catch (GitAPIException e) {
-            e.printStackTrace();
+        } catch (GitAPIException exception) {
+            throw new RepositoryNotFoundOrInvalidException();
         }
 
         this.size = 0;
@@ -54,8 +57,8 @@ public class GitRepoReader extends AbstractRepoReader{
 
         try {
             commits = git.log().call();
-        } catch (GitAPIException e) {
-            e.printStackTrace();
+        } catch (GitAPIException exception) {
+            throw new RepositoryNotFoundOrInvalidException();
         }
 
         final Iterable<RevCommit> finalCommits = commits;
@@ -93,14 +96,12 @@ public class GitRepoReader extends AbstractRepoReader{
 
     public Progress getProgress() {
         Progress progress = new Progress();
-//        progress.setState(this.state);
         progress.setWorkDone(this.progress.get());
         progress.setMax(this.size);
-        //progress.setProgressFraction(((float) this.progress.get()) / this.size);
         return progress;
     }
 
-    public static void main(String[] args){
+    /*public static void main(String[] args){
         GitRepoReader repoReader = new GitRepoReader("/home/linux/Desktop/Repo-Analyzer/.git");
         Future<List<Commit>> future = repoReader.getCommits();
 
@@ -120,5 +121,5 @@ public class GitRepoReader extends AbstractRepoReader{
         for(Commit commit : res){
             System.out.println(commit + "\n");
         }
-    }
+    }*/
 }

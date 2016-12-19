@@ -17,7 +17,7 @@ public class CommitPercentageComponent extends AbstractStatisticsComponent {
         view = new CommitPercentageView(calculator.generateData());
     }
 
-    public void createStatisticsView() {
+    public void createAndShowStatisticsView() {
         this.view.showStage(new Stage());
     }
 

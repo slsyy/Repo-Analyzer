@@ -18,7 +18,7 @@ public class RevertStatisticsComponent extends AbstractStatisticsComponent {
         revertView = new RevertStatisticsView(revertCalculator.generateStatistics());
     }
 
-    public void createStatisticsView() {
+    public void createAndShowStatisticsView() {
         revertView.createView(new Stage());
     }
 }

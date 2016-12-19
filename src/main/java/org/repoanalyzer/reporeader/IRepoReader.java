@@ -6,6 +6,6 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 public interface IRepoReader {
-    Future<List<Commit>> getCommits();
+    Future<List<Commit>> getCommits() throws RepositoryNotFoundOrInvalidException;
     Progress getProgress();
 }

@@ -16,7 +16,7 @@ public class HeatMapComponent extends AbstractStatisticsComponent {
         view = new HeatMapView(calculator.generateData(), commits.size());
     }
 
-    public void createStatisticsView() {
+    public void createAndShowStatisticsView() {
         this.view.showStage(new Stage());
     }
 

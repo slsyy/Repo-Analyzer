@@ -21,7 +21,7 @@ public class BalanceAddDeleteComponent extends AbstractStatisticsComponent {
     }
 
     @Override
-    public void createStatisticsView() {
+    public void createAndShowStatisticsView() {
         this.view.showStage(new Stage());
     }
 
