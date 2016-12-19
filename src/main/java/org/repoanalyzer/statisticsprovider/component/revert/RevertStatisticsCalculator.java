@@ -3,14 +3,11 @@ package org.repoanalyzer.statisticsprovider.component.revert;
 
 import org.repoanalyzer.reporeader.commit.Author;
 import org.repoanalyzer.reporeader.commit.Commit;
-import org.repoanalyzer.statisticsprovider.data.RevertStatisticsData;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 public class RevertStatisticsCalculator {
     private List<Commit> commits;

@@ -3,7 +3,6 @@ package org.repoanalyzer.statisticsprovider.component.commitpercentage;
 
 import org.repoanalyzer.reporeader.commit.Author;
 import org.repoanalyzer.reporeader.commit.Commit;
-import org.repoanalyzer.statisticsprovider.data.CommitPercentageData;
 
 import java.util.ArrayList;
 import java.util.List;

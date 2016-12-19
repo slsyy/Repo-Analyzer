@@ -90,10 +90,7 @@ public class StatisticsController extends Application {
         statisticsComponents.add(new BalanceAddDeleteComponent(commits));
         statisticsComponents.add(new RevertStatisticsComponent(commits));
 
-        try {
-            statisticsComponents.forEach(IStatisticsComponent::createAndShowStatisticsView);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        statisticsComponents.forEach(IStatisticsComponent::createAndShowStatisticsView);
+
     }
 }

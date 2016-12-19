@@ -7,7 +7,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.stage.Stage;
-import org.repoanalyzer.statisticsprovider.data.CommitPercentageData;
 
 import java.util.ArrayList;
 import java.util.List;
