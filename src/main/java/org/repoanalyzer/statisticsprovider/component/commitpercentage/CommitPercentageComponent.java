@@ -1,14 +1,13 @@
-package org.repoanalyzer.statisticsprovider.component;
+package org.repoanalyzer.statisticsprovider.component.commitpercentage;
 
 
 import javafx.stage.Stage;
 import org.repoanalyzer.reporeader.commit.Commit;
-import org.repoanalyzer.statisticsprovider.calculator.CommitPercentageCalculator;
-import org.repoanalyzer.statisticsprovider.view.CommitPercentageView;
+import org.repoanalyzer.statisticsprovider.component.AbstractStatisticsComponent;
 
 import java.util.List;
 
-public class CommitPercentageComponent extends AbstractStatisticsComponent{
+public class CommitPercentageComponent extends AbstractStatisticsComponent {
     private CommitPercentageView view;
     private CommitPercentageCalculator calculator;
 

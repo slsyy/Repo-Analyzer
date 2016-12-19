@@ -1,4 +1,4 @@
-package org.repoanalyzer.statisticsprovider.view;
+package org.repoanalyzer.statisticsprovider.component.commitpercentage;
 
 
 import javafx.collections.FXCollections;

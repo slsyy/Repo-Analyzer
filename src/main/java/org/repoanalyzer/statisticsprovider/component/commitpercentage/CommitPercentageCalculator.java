@@ -1,4 +1,4 @@
-package org.repoanalyzer.statisticsprovider.calculator;
+package org.repoanalyzer.statisticsprovider.component.commitpercentage;
 
 
 import org.repoanalyzer.reporeader.commit.Author;

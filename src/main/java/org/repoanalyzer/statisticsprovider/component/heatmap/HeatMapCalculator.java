@@ -1,9 +1,7 @@
-package org.repoanalyzer.statisticsprovider.calculator;
+package org.repoanalyzer.statisticsprovider.component.heatmap;
 
 import org.joda.time.DateTimeConstants;
 import org.repoanalyzer.reporeader.commit.Commit;
-import org.repoanalyzer.statisticsprovider.data.Days;
-import org.repoanalyzer.statisticsprovider.data.HeatMapData;
 
 import java.util.ArrayList;
 import java.util.List;

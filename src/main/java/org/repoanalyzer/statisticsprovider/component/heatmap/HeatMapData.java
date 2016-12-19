@@ -1,4 +1,4 @@
-package org.repoanalyzer.statisticsprovider.data;
+package org.repoanalyzer.statisticsprovider.component.heatmap;
 
 /**
  * Created by Jakub on 2016-12-15.

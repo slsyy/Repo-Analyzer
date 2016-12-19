@@ -1,14 +1,12 @@
-package org.repoanalyzer.statisticsprovider.view;
+package org.repoanalyzer.statisticsprovider.component.balanceadddelete;
 
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.repoanalyzer.statisticsprovider.data.BalanceAddDeleteData;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package org.repoanalyzer.statisticsprovider.view;
+package org.repoanalyzer.statisticsprovider.component.heatmap;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -8,8 +8,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.repoanalyzer.statisticsprovider.data.Days;
-import org.repoanalyzer.statisticsprovider.data.HeatMapData;
+import org.repoanalyzer.statisticsprovider.component.heatmap.Days;
+import org.repoanalyzer.statisticsprovider.component.heatmap.HeatMapData;
 
 import java.util.List;
 

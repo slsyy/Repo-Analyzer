@@ -1,13 +1,12 @@
-package org.repoanalyzer.statisticsprovider.component;
+package org.repoanalyzer.statisticsprovider.component.heatmap;
 
 
 import javafx.stage.Stage;
 import org.repoanalyzer.reporeader.commit.Commit;
-import org.repoanalyzer.statisticsprovider.calculator.HeatMapCalculator;
-import org.repoanalyzer.statisticsprovider.view.HeatMapView;
+import org.repoanalyzer.statisticsprovider.component.AbstractStatisticsComponent;
 
 import java.util.List;
-public class HeatMapComponent extends AbstractStatisticsComponent{
+public class HeatMapComponent extends AbstractStatisticsComponent {
     private HeatMapView view;
     private HeatMapCalculator calculator;
 

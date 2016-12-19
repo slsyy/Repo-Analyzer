@@ -7,9 +7,11 @@ import javafx.stage.Stage;
 import org.repoanalyzer.reporeader.IRepoReader;
 import org.repoanalyzer.reporeader.RepoReaderFactory;
 import org.repoanalyzer.reporeader.commit.Commit;
-import org.repoanalyzer.statisticsprovider.calculator.BalanceAddDeleteCalculator;
 import org.repoanalyzer.statisticsprovider.component.*;
-import org.repoanalyzer.statisticsprovider.data.RevertStatisticsData;
+import org.repoanalyzer.statisticsprovider.component.balanceadddelete.BalanceAddDeleteComponent;
+import org.repoanalyzer.statisticsprovider.component.commitpercentage.CommitPercentageComponent;
+import org.repoanalyzer.statisticsprovider.component.heatmap.HeatMapComponent;
+import org.repoanalyzer.statisticsprovider.component.revert.RevertStatisticsComponent;
 import org.repoanalyzer.statisticsprovider.view.RepoPathReaderView;
 import org.repoanalyzer.statisticsprovider.view.RepoReaderProgressBarView;
 
