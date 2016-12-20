@@ -1,8 +1,8 @@
-package org.repoanalyzer.statisticsprovider.component.balanceadddelete;
+package org.repoanalyzer.statisticsprovider.statistics.balanceadddelete;
 
 import javafx.stage.Stage;
 import org.repoanalyzer.reporeader.commit.Commit;
-import org.repoanalyzer.statisticsprovider.component.AbstractStatisticsComponent;
+import org.repoanalyzer.statisticsprovider.statistics.AbstractStatisticsComponent;
 
 import java.util.List;
 

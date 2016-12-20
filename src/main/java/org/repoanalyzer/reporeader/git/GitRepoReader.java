@@ -7,7 +7,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.repoanalyzer.reporeader.AbstractRepoReader;
 import org.repoanalyzer.reporeader.Progress;
-import org.repoanalyzer.reporeader.RepositoryNotFoundOrInvalidException;
+import org.repoanalyzer.reporeader.exceptions.RepositoryNotFoundOrInvalidException;
 import org.repoanalyzer.reporeader.commit.AuthorProvider;
 import org.repoanalyzer.reporeader.commit.Commit;
 
@@ -22,48 +22,26 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GitRepoReader extends AbstractRepoReader {
-    public GitRepoReader(String url){
+    public GitRepoReader(String url) {
         super(new File(url, ".git").toString());
-//        this.state = 'P';
+    }
+
+    public GitRepoReader(String url, String authorFile) {
+        super(new File(url, ".git").toString(), authorFile);
     }
 
     public Future<List<Commit>> getCommits() throws RepositoryNotFoundOrInvalidException {
-//        this.state = 'R';
         this.progress = new AtomicInteger();
-
-        FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        builder.setGitDir(new File(this.url))
-               .readEnvironment()
-               .findGitDir();
-        Repository repository = null;
-
-        try {
-            repository = builder.build();
-        } catch (IOException exception) {
-            throw new RepositoryNotFoundOrInvalidException();
-        }
-
-        Git git = new Git(repository);
-
-        Iterable<RevCommit> commits = null;
-        try {
-            commits = git.log().call();
-        } catch (GitAPIException exception) {
-            throw new RepositoryNotFoundOrInvalidException();
-        }
-
+        Git git = new Git(buildRepository());
+        Iterable<RevCommit> commits = getRevCommitsFromRepository(git);
         this.size = 0;
+
         for(RevCommit commit : commits) this.size++;
 
-        try {
-            commits = git.log().call();
-        } catch (GitAPIException exception) {
-            throw new RepositoryNotFoundOrInvalidException();
-        }
+        commits = getRevCommitsFromRepository(git);
 
         final Iterable<RevCommit> finalCommits = commits;
 
-        this.state = 'T';
         Callable<List<Commit>> task = () -> {
             List<Commit> result = new LinkedList<>();
             AuthorProvider authorProvider = new AuthorProvider();
@@ -86,7 +64,6 @@ public class GitRepoReader extends AbstractRepoReader {
             return result;
         };
 
-//        this.state = 'P';
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<List<Commit>> future = executor.submit(task);
         executor.shutdown();
@@ -101,25 +78,27 @@ public class GitRepoReader extends AbstractRepoReader {
         return progress;
     }
 
-    /*public static void main(String[] args){
-        GitRepoReader repoReader = new GitRepoReader("/home/linux/Desktop/Repo-Analyzer/.git");
-        Future<List<Commit>> future = repoReader.getCommits();
-
-        while(!future.isDone()) {
-            //System.out.println(repoReader.getProgress().getProgressFraction());
-        }
-
-        List<Commit> res = null;
+    private Iterable<RevCommit> getRevCommitsFromRepository(Git git) throws RepositoryNotFoundOrInvalidException {
+        Iterable<RevCommit> commits = null;
         try {
-            res = future.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+            commits = git.log().call();
+        } catch (GitAPIException exception) {
+            throw new RepositoryNotFoundOrInvalidException();
         }
+        return commits;
+    }
 
-        for(Commit commit : res){
-            System.out.println(commit + "\n");
+    private Repository buildRepository() throws RepositoryNotFoundOrInvalidException {
+        FileRepositoryBuilder builder = new FileRepositoryBuilder();
+        builder.setGitDir(new File(this.url))
+                .readEnvironment()
+                .findGitDir();
+        Repository repo = null;
+        try {
+            repo = builder.build();
+        } catch (IOException exception) {
+            throw new RepositoryNotFoundOrInvalidException();
         }
-    }*/
+        return repo;
+    }
 }

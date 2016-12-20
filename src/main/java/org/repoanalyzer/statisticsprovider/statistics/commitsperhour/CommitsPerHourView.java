@@ -1,4 +1,4 @@
-package org.repoanalyzer.statisticsprovider.component.heatmap;
+package org.repoanalyzer.statisticsprovider.statistics.commitsperhour;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -8,17 +8,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.repoanalyzer.statisticsprovider.component.heatmap.Days;
-import org.repoanalyzer.statisticsprovider.component.heatmap.HeatMapData;
 
 import java.util.List;
 
 /**
  * Created by Jakub on 2016-12-15.
  */
-public class HeatMapView {
+public class CommitsPerHourView {
 
-    private List<HeatMapData> data;
+    private List<CommitsPerHourData> data;
     private final Integer numOfCommits;
     private final Color OVER_10 = Color.web("#ff0000");
     private final Color OVER_7 = Color.web("#cc3333");
@@ -27,7 +25,7 @@ public class HeatMapView {
     private final Color ZERO = Color.web("#808080");
 
 
-    public HeatMapView(List<HeatMapData> data, Integer numOfCommits) {
+    public CommitsPerHourView(List<CommitsPerHourData> data, Integer numOfCommits) {
         this.data = data;
         this.numOfCommits = numOfCommits;
     }
@@ -47,7 +45,7 @@ public class HeatMapView {
         for(Integer i = 0; i < 24; i++)
             gridpane.add(new Text(i.toString()),i+1,0);
 
-        for(HeatMapData data1 : data){
+        for(CommitsPerHourData data1 : data){
             Rectangle rect = new Rectangle(20,20);
             rect.setFill(chooseColor(data1.getNumOfCommits()));
             gridpane.add(rect,data1.getHour()+1, data1.getDay().getNumber()+1);

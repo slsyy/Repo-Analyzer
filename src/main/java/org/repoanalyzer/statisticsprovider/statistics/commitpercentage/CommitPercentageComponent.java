@@ -1,9 +1,9 @@
-package org.repoanalyzer.statisticsprovider.component.commitpercentage;
+package org.repoanalyzer.statisticsprovider.statistics.commitpercentage;
 
 
 import javafx.stage.Stage;
 import org.repoanalyzer.reporeader.commit.Commit;
-import org.repoanalyzer.statisticsprovider.component.AbstractStatisticsComponent;
+import org.repoanalyzer.statisticsprovider.statistics.AbstractStatisticsComponent;
 
 import java.util.List;
 

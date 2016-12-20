@@ -1,4 +1,4 @@
-package org.repoanalyzer.statisticsprovider.component.balanceadddelete;
+package org.repoanalyzer.statisticsprovider.statistics.balanceadddelete;
 
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;

@@ -1,4 +1,4 @@
-package org.repoanalyzer.statisticsprovider.component.heatmap;
+package org.repoanalyzer.statisticsprovider.statistics.commitsperhour;
 
 import org.joda.time.DateTimeConstants;
 import org.repoanalyzer.reporeader.commit.Commit;
@@ -7,18 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class HeatMapCalculator {
+public class CommitsPerHourCalculator {
     private List<Commit> commits;
 
-    public HeatMapCalculator(List<Commit> commits) {
+    public CommitsPerHourCalculator(List<Commit> commits) {
         this.commits = commits;
     }
 
-    public List<HeatMapData> generateData(){
-        List<HeatMapData> result = new ArrayList<HeatMapData>();
+    public List<CommitsPerHourData> generateData(){
+        List<CommitsPerHourData> result = new ArrayList<CommitsPerHourData>();
         for(Days day : Days.values())
             for(int i =0; i< 24; i++)
-                result.add(new HeatMapData(day,i));
+                result.add(new CommitsPerHourData(day,i));
 
         Days day = null;
 
@@ -47,7 +47,7 @@ public class HeatMapCalculator {
                     day=Days.SUNDAY;
                     break;
             }
-            for(HeatMapData hmd: result)
+            for(CommitsPerHourData hmd: result)
                 if(hmd.getDay().equals(day) && hmd.getHour().equals(hour))
                     hmd.incrementCommits();
         }

@@ -1,4 +1,4 @@
-package org.repoanalyzer.statisticsprovider.component;
+package org.repoanalyzer.statisticsprovider.statistics;
 
 import org.repoanalyzer.reporeader.commit.Commit;
 

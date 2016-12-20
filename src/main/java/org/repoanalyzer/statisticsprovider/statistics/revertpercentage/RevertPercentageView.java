@@ -1,4 +1,4 @@
-package org.repoanalyzer.statisticsprovider.component.revert;
+package org.repoanalyzer.statisticsprovider.statistics.revertpercentage;
 
 
 import javafx.beans.value.ChangeListener;
@@ -17,17 +17,17 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
-public class RevertStatisticsView {
-    private List<RevertStatisticsData> statisticData;
+public class RevertPercentageView {
+    private List<RevertPercentageData> statisticData;
 
-    public RevertStatisticsView(List<RevertStatisticsData> statisticData){
+    public RevertPercentageView(List<RevertPercentageData> statisticData){
         this.statisticData = statisticData;
     }
 
     public void createView(Stage stage){
         ObservableList<String> authorSet = FXCollections.observableArrayList();
         Spinner<String> spinner = new Spinner<>();
-        for(RevertStatisticsData data : statisticData){
+        for(RevertPercentageData data : statisticData){
             authorSet.add(data.getAuthor().getFirstName());
         }
         spinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(authorSet));
@@ -43,8 +43,8 @@ public class RevertStatisticsView {
         spinner.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                RevertStatisticsData data = null;
-                for(RevertStatisticsData data1 : statisticData)
+                RevertPercentageData data = null;
+                for(RevertPercentageData data1 : statisticData)
                     if(data1.getAuthor().getFirstName().equals(newValue)){
                         data = data1;
                         break;

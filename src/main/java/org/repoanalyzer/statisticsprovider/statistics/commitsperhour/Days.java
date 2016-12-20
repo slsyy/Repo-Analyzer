@@ -1,4 +1,4 @@
-package org.repoanalyzer.statisticsprovider.component.heatmap;
+package org.repoanalyzer.statisticsprovider.statistics.commitsperhour;
 
 /**
  * Created by Jakub on 2016-12-15.

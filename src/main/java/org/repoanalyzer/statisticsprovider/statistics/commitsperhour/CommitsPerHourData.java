@@ -1,14 +1,14 @@
-package org.repoanalyzer.statisticsprovider.component.heatmap;
+package org.repoanalyzer.statisticsprovider.statistics.commitsperhour;
 
 /**
  * Created by Jakub on 2016-12-15.
  */
-public class HeatMapData {
+public class CommitsPerHourData {
     private Days day;
     private Integer hour;
     private Integer numOfCommits = 0;
 
-    public HeatMapData(Days day, Integer hour) {
+    public CommitsPerHourData(Days day, Integer hour) {
         this.day = day;
         this.hour = hour;
     }

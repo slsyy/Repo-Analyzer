@@ -1,18 +1,13 @@
-package org.repoanalyzer.statisticsprovider.component.revert;
+package org.repoanalyzer.statisticsprovider.statistics.revertpercentage;
 
 
 import org.repoanalyzer.reporeader.commit.Author;
-import org.repoanalyzer.reporeader.commit.Commit;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class RevertStatisticsData {
+public class RevertPercentageData {
     private Author author;
     private Float percentage;
 
-    public RevertStatisticsData(Author author){
+    public RevertPercentageData(Author author){
         this.author = author;
     }
 

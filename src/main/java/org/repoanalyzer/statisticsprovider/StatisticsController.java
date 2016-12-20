@@ -6,13 +6,13 @@ import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import org.repoanalyzer.reporeader.IRepoReader;
 import org.repoanalyzer.reporeader.RepoReaderFactory;
-import org.repoanalyzer.reporeader.RepositoryNotFoundOrInvalidException;
+import org.repoanalyzer.reporeader.exceptions.RepositoryNotFoundOrInvalidException;
 import org.repoanalyzer.reporeader.commit.Commit;
-import org.repoanalyzer.statisticsprovider.component.*;
-import org.repoanalyzer.statisticsprovider.component.balanceadddelete.BalanceAddDeleteComponent;
-import org.repoanalyzer.statisticsprovider.component.commitpercentage.CommitPercentageComponent;
-import org.repoanalyzer.statisticsprovider.component.heatmap.HeatMapComponent;
-import org.repoanalyzer.statisticsprovider.component.revert.RevertStatisticsComponent;
+import org.repoanalyzer.statisticsprovider.statistics.*;
+import org.repoanalyzer.statisticsprovider.statistics.balanceadddelete.BalanceAddDeleteComponent;
+import org.repoanalyzer.statisticsprovider.statistics.commitpercentage.CommitPercentageComponent;
+import org.repoanalyzer.statisticsprovider.statistics.commitsperhour.CommitsPerHourComponent;
+import org.repoanalyzer.statisticsprovider.statistics.revertpercentage.RevertPercentageComponent;
 import org.repoanalyzer.statisticsprovider.view.RepoPathReaderView;
 import org.repoanalyzer.statisticsprovider.view.RepoReaderProgressBarView;
 
@@ -85,10 +85,10 @@ public class StatisticsController extends Application {
         }
 
         List<IStatisticsComponent> statisticsComponents = new ArrayList<>();
-        statisticsComponents.add(new HeatMapComponent(commits));
+        statisticsComponents.add(new CommitsPerHourComponent(commits));
         statisticsComponents.add(new CommitPercentageComponent(commits));
         statisticsComponents.add(new BalanceAddDeleteComponent(commits));
-        statisticsComponents.add(new RevertStatisticsComponent(commits));
+        statisticsComponents.add(new RevertPercentageComponent(commits));
 
         statisticsComponents.forEach(IStatisticsComponent::createAndShowStatisticsView);
 

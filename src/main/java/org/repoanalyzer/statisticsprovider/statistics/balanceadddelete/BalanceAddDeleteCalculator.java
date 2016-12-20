@@ -1,8 +1,7 @@
-package org.repoanalyzer.statisticsprovider.component.balanceadddelete;
+package org.repoanalyzer.statisticsprovider.statistics.balanceadddelete;
 
 import org.repoanalyzer.reporeader.commit.Author;
 import org.repoanalyzer.reporeader.commit.Commit;
-import org.repoanalyzer.statisticsprovider.component.balanceadddelete.BalanceAddDeleteData;
 
 import java.util.ArrayList;
 import java.util.List;

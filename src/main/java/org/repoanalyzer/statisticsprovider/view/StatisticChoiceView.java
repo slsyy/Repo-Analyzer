@@ -1,7 +1,7 @@
 package org.repoanalyzer.statisticsprovider.view;
 
 
-import org.repoanalyzer.statisticsprovider.component.IStatisticsComponent;
+import org.repoanalyzer.statisticsprovider.statistics.IStatisticsComponent;
 
 import java.util.List;
 

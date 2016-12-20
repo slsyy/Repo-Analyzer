@@ -1,4 +1,4 @@
-package org.repoanalyzer.statisticsprovider.component.revert;
+package org.repoanalyzer.statisticsprovider.statistics.revertpercentage;
 
 
 import org.repoanalyzer.reporeader.commit.Author;
@@ -9,20 +9,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class RevertStatisticsCalculator {
+public class RevertPercentageCalculator {
     private List<Commit> commits;
 
-    public RevertStatisticsCalculator(List<Commit> commits){
+    public RevertPercentageCalculator(List<Commit> commits){
         this.commits = commits;
     }
 
-    public List<RevertStatisticsData> generateStatistics(){
-        List<RevertStatisticsData> result = new ArrayList<>();
+    public List<RevertPercentageData> generateStatistics(){
+        List<RevertPercentageData> result = new ArrayList<>();
         Set<String> authors = new HashSet<>();
         for(Commit commit : commits){
             Author author =commit.getAuthor();
             if(!authors.contains(author.getFirstName())){
-                RevertStatisticsData data =new RevertStatisticsData(author);
+                RevertPercentageData data =new RevertPercentageData(author);
                 Integer reverts = 0;
                 for(Commit c : author.getCommits()){
                     String[] words = c.getMessage().split(" ");

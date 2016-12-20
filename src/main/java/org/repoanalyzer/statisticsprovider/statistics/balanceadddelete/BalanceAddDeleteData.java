@@ -1,4 +1,4 @@
-package org.repoanalyzer.statisticsprovider.component.balanceadddelete;
+package org.repoanalyzer.statisticsprovider.statistics.balanceadddelete;
 
 import org.repoanalyzer.reporeader.commit.Author;
 

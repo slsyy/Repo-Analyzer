@@ -1,4 +1,4 @@
-package org.repoanalyzer.statisticsprovider.component.commitpercentage;
+package org.repoanalyzer.statisticsprovider.statistics.commitpercentage;
 
 
 public class CommitPercentageData {
