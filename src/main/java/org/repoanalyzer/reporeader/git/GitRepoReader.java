@@ -45,6 +45,7 @@ public class GitRepoReader extends AbstractRepoReader {
         Callable<List<Commit>> task = () -> {
             List<Commit> result = new LinkedList<>();
             AuthorProvider authorProvider = new AuthorProvider();
+            if (!this.authorFile.isEmpty()) authorProvider.addAuthorsFromFile(this.authorFile);
 
             for(RevCommit commit : finalCommits){
                 this.progress.incrementAndGet();
