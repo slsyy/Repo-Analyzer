@@ -79,6 +79,7 @@ public class AuthorProvider {
                     if (!(authorMail instanceof String)) throw new InvalidJsonDataFormatException();
                     author.addEmail((String) authorMail);
                 }
+                authors.add(author);
             }
         }catch(ParseException pe){
             throw new JsonParsingException(pe.getPosition());
