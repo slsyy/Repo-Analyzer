@@ -24,6 +24,13 @@ public class CommitsGenerator implements ICommitsGenerator {
         return testCommitBuilder;
     }
 
+    public TestCommitBuilder createNewTestCommit(int commitsNumber, String message) {
+        TestCommitBuilder testCommitBuilder = new TestCommitBuilder(authorProvider);
+        testCommitBuilder.setMessage(message);
+        testCommitBuilderToCommitsNumber.put(testCommitBuilder, commitsNumber);
+        return testCommitBuilder;
+    }
+
     @Override
     public List<Commit> getCommits() {
         List<Commit> result = new ArrayList<>();
