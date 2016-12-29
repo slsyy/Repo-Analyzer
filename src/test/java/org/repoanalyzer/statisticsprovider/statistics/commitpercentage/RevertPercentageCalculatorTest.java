@@ -21,7 +21,6 @@ public class RevertPercentageCalculatorTest {
 
     private static final double DELTA = 0.01;
     private CommitsGenerator commitsGenerator;
-    private RevertPercentageCalculator revertPercentageCalculator;
     private String authorName;
     private String authorEmail;
     private int revertsNumber;
@@ -64,7 +63,8 @@ public class RevertPercentageCalculatorTest {
         commitsGenerator.createNewTestCommit(commitsNumber)
                 .setAuthorName(authorName)
                 .setAuthorEmail(authorEmail);
-        commitsGenerator.createNewTestCommit(revertsNumber, "Revert message")
+        commitsGenerator.createNewTestCommit(revertsNumber)
+                .setMessage("Revert message")
                 .setAuthorName(authorName)
                 .setAuthorEmail(authorEmail);
 
