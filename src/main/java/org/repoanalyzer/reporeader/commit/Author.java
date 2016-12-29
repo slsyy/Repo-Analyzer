@@ -4,10 +4,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Author {
-
     private LinkedList<String> names;
     private LinkedList<String> emails;
     private LinkedList<Commit> commits;
+
+    public Author(String name) {
+        this.names = new LinkedList<>();
+        this.emails = new LinkedList<>();
+        this.commits = new LinkedList<>();
+
+        this.names.add(name);
+    }
 
     public Author(String name, String email) {
         this.names = new LinkedList<>();
@@ -42,9 +49,7 @@ public class Author {
         commits.add(commit);
     }
 
-    public LinkedList<Commit> getCommits() {
-        return commits;
-    }
+    public LinkedList<Commit> getCommits() { return commits; }
 
     @Override
     public String toString(){

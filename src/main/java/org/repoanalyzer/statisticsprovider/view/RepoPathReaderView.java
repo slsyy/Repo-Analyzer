@@ -23,14 +23,16 @@ public class RepoPathReaderView {
 
     public void showStage(Stage stage){
         stage.setTitle("RepoAnalyzer");
+
         final TextField urlText = new TextField();
         urlText.setPromptText("Insert git url...");
         urlText.setFocusTraversable(false);
+
+        final Text introductionText = new Text("Welcome to RepoAnalyzer!\nInsert git url and click Run button :)");
+
+
         Button browseButton = new Button("Browse");
         Button runButton = new Button("Run");
-
-
-        Text introductionText = new Text("Welcome to RepoAnalyzer!\nInsert git url and click Run button :)");
 
         browseButton.setOnAction(event -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -49,7 +51,6 @@ public class RepoPathReaderView {
             }
         });
 
-
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setPadding(new Insets(25, 25, 25, 25));
@@ -57,8 +58,6 @@ public class RepoPathReaderView {
         grid.add(urlText,1,2);
         grid.add(browseButton,2,2);
         grid.add(runButton,1,3);
-
-
 
         stage.setScene(new Scene(grid, 400, 150));
         stage.show();
