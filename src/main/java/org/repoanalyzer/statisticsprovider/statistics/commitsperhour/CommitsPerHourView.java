@@ -5,35 +5,34 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import java.util.List;
 
 /**
  * Created by Jakub on 2016-12-15.
  */
 public class CommitsPerHourView {
 
-    private List<CommitsPerHourData> data;
-    private final Integer numOfCommits;
-    private final Color OVER_10 = Color.web("#ff0000");
-    private final Color OVER_7 = Color.web("#cc3333");
-    private final Color OVER_3 = Color.web("#b34d4d");
-    private final Color OVER_0 = Color.web("#996666");
+    private CommitsPerHourData data;
+    private Integer maxCommits;
+    private final Color MAX = Color.web("#ff0000");
     private final Color ZERO = Color.web("#808080");
 
+    private final Integer HOURS = 24;
 
-    public CommitsPerHourView(List<CommitsPerHourData> data, Integer numOfCommits) {
+    public CommitsPerHourView(CommitsPerHourData data) {
         this.data = data;
-        this.numOfCommits = numOfCommits;
+        this.maxCommits = data.getMaxCommitsPerDay();
     }
 
     public void showStage(Stage stage){
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 380, 150, Color.WHITE);
-
+        root.setPrefSize(660,300);
         GridPane gridpane = new GridPane();
         gridpane.setPadding(new Insets(5));
         gridpane.setHgap(5);
@@ -42,63 +41,39 @@ public class CommitsPerHourView {
 
         for(Days day : Days.values())
             gridpane.add(new Text(day.getShortcut()),0,day.getNumber()+1);
-        for(Integer i = 0; i < 24; i++)
+        for(Integer i = 0; i < HOURS; i++)
             gridpane.add(new Text(i.toString()),i+1,0);
 
-        for(CommitsPerHourData data1 : data){
-            Rectangle rect = new Rectangle(20,20);
-            rect.setFill(chooseColor(data1.getNumOfCommits()));
-            gridpane.add(rect,data1.getHour()+1, data1.getDay().getNumber()+1);
+        for(Days day : Days.values()){
+            for(int i = 0; i < HOURS; i++){
+                Rectangle rect = new Rectangle(20,20);
+                rect.setFill(chooseColor(data.getDataPerDayAndHour(day,i)));
+                gridpane.add(rect,i+1,day.getNumber()+1);
+            }
         }
-
-        showDesription(gridpane);
+        showDesription(root);
 
         root.setCenter(gridpane);
-        stage.setWidth(800);
+        stage.setWidth(660);
         stage.setHeight(300);
         stage.setScene(scene);
         stage.show();
     }
 
     private Color chooseColor(final Integer commits){
-        if(commits == 0)
-            return ZERO;
-        Integer percentage = (commits*100)/numOfCommits;
-        if(percentage>=10)
-            return OVER_10;
-        else if(percentage>=7)
-            return OVER_7;
-        else if(percentage>=3)
-            return OVER_3;
-        else
-            return OVER_0;
+        Double percentage = (commits*100.0d) / maxCommits;
+        return ZERO.interpolate(MAX,percentage/ 100.0d);
     }
 
-    private void showDesription(GridPane gridPane){
-        Rectangle rect = new Rectangle(20,20);
-        rect.setFill(OVER_10);
-        gridPane.add(rect,28, 2);
-        gridPane.add(new Text(">10%"),29,2);
+    private void showDesription(BorderPane borderPane){
+        Stop[] stops = new Stop[] {new Stop(0,ZERO), new Stop(1,MAX)};
+        LinearGradient lg = new LinearGradient(0,0,1,0,true, CycleMethod.NO_CYCLE,stops);
+        Rectangle rect = new Rectangle(160,40);
+        rect.setFill(lg);
+        BorderPane borderPane1 = new BorderPane();
+        borderPane1.setCenter(rect);
+        borderPane.setBottom(borderPane1);
 
-        Rectangle rect1 = new Rectangle(20,20);
-        rect1.setFill(OVER_7);
-        gridPane.add(rect1,28, 3);
-        gridPane.add(new Text(">7%"),29,3);
-
-        Rectangle rect2 = new Rectangle(20,20);
-        rect2.setFill(OVER_3);
-        gridPane.add(rect2,28, 4);
-        gridPane.add(new Text(">3%"),29,4);
-
-        Rectangle rect3 = new Rectangle(20,20);
-        rect3.setFill(OVER_0);
-        gridPane.add(rect3,28, 5);
-        gridPane.add(new Text(">0%"),29,5);
-
-        Rectangle rect4 = new Rectangle(20,20);
-        rect4.setFill(ZERO);
-        gridPane.add(rect4,28, 6);
-        gridPane.add(new Text("0%"),29,6);
 
     }
 }

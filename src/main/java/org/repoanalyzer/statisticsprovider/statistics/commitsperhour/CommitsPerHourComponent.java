@@ -13,7 +13,7 @@ public class CommitsPerHourComponent extends AbstractStatisticsComponent {
     public CommitsPerHourComponent(List<Commit> commits) {
         super(commits);
         calculator = new CommitsPerHourCalculator(commits);
-        view = new CommitsPerHourView(calculator.generateData(), commits.size());
+        view = new CommitsPerHourView(calculator.generateData());
     }
 
     public void createAndShowStatisticsView() {

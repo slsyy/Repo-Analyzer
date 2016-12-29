@@ -1,31 +1,53 @@
 package org.repoanalyzer.statisticsprovider.statistics.commitsperhour;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by Jakub on 2016-12-15.
  */
 public class CommitsPerHourData {
-    private Days day;
-    private Integer hour;
-    private Integer numOfCommits = 0;
+    private Table<Days, Integer, Integer> data = HashBasedTable.create();
 
-    public CommitsPerHourData(Days day, Integer hour) {
-        this.day = day;
-        this.hour = hour;
+
+
+    private Integer numOfCommits = 0;
+    private Integer maxCommitsPerDay = 0;
+
+    public CommitsPerHourData() {
     }
 
     public Integer getNumOfCommits() {
         return numOfCommits;
     }
 
-    public void incrementCommits(){
-        numOfCommits++;
+    public void incrementCommits(Days day, Integer hour){
+        Integer oldValue = data.get(day,hour);
+        data.remove(day,hour);
+        data.put(day,hour,oldValue+1);
     }
 
-    public Days getDay() {
-        return day;
+    public Integer getMaxCommitsPerDay() {
+        return maxCommitsPerDay;
     }
 
-    public Integer getHour() {
-        return hour;
+    public void trySetMaxCommitsPerDay(Integer maxCommitsPerDay) {
+        if(maxCommitsPerDay>this.maxCommitsPerDay)
+            this.maxCommitsPerDay = maxCommitsPerDay;
+    }
+
+    public void putEmptyData(Days day, Integer hour){
+        data.put(day,hour,0);
+    }
+
+    public Integer getDataPerDayAndHour(Days day, Integer hour){
+        return data.get(day,hour);
+    }
+
+    public Set<Integer> getAllValues(){
+        return new HashSet<>(data.values());
     }
 }
