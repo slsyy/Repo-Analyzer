@@ -3,43 +3,49 @@ package org.repoanalyzer.statisticsprovider.statistics.commitpercentage;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.repoanalyzer.reporeader.commit.Commit;
 import org.repoanalyzer.reporeader.commit.commitsgenerator.CommitsGenerator;
 import org.repoanalyzer.statisticsprovider.statistics.revertpercentage.RevertPercentageCalculator;
 import org.repoanalyzer.statisticsprovider.statistics.revertpercentage.RevertPercentageData;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(Parameterized.class)
 public class RevertPercentageCalculatorTest {
-    private static final String FIRST_AUTHOR_NAME = "first";
-    private static final String FIRST_AUTHOR_EMAIL = "first";
-    private static final int FIRST_AUTHOR_REVERTS_NUMBER = 12;
-    private static final int FIRST_AUTHOR_COMMITS_NUMBER = 100;
-    private static final Float FIRST_AUTHOR_RATE =
-            100*(float)FIRST_AUTHOR_REVERTS_NUMBER / (FIRST_AUTHOR_REVERTS_NUMBER + FIRST_AUTHOR_COMMITS_NUMBER);
 
-
-    private static final String SECOND_AUTHOR_NAME = "second";
-    private static final String SECOND_AUTHOR_EMAIL = "second";
-    private static final int SECOND_AUTHOR_REVERTS_NUMBER = 4;
-    private static final int SECOND_AUTHOR_COMMITS_NUMBER = 2;
-    private static final Float SECOND_AUTHOR_RATE =
-            100*(float)SECOND_AUTHOR_REVERTS_NUMBER / (SECOND_AUTHOR_REVERTS_NUMBER + SECOND_AUTHOR_COMMITS_NUMBER);
-
-
-    private static final String THIRD_AUTHOR_NAME = "third";
-    private static final String THIRD_AUTHOR_EMAIL = "third";
-    private static final int THIRD_AUTHOR_REVERTS_NUMBER = 1437;
-    private static final int THIRD_AUTHOR_COMMITS_NUMBER = 5000;
-    private static final Float THIRD_AUTHOR_RATE =
-            100*(float)THIRD_AUTHOR_REVERTS_NUMBER / (THIRD_AUTHOR_REVERTS_NUMBER + THIRD_AUTHOR_COMMITS_NUMBER);
-
-    private static final double DELTA = 0.001;
-
+    private static final double DELTA = 0.01;
     private CommitsGenerator commitsGenerator;
     private RevertPercentageCalculator revertPercentageCalculator;
+    private String authorName;
+    private String authorEmail;
+    private int revertsNumber;
+    private int commitsNumber;
+    private double exptected;
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+
+        return Arrays.asList(new Object[][] {
+                { "first", "first@first", 12, 100,  10.714},
+                { "second", "second@second", 4, 2,  66.666},
+                { "third", "third@third", 1437, 5000,  22.324}
+        });
+    }
+
+    public RevertPercentageCalculatorTest(String authorName, String authorEmail, int revertsNumber, int commitsNumber,
+                                          double expected){
+        this.authorName = authorName;
+        this.authorEmail = authorEmail;
+        this.revertsNumber = revertsNumber;
+        this.commitsNumber = commitsNumber;
+        this.exptected = expected;
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -55,33 +61,17 @@ public class RevertPercentageCalculatorTest {
 
     @Test
     public void generateData() throws Exception {
-        commitsGenerator.createNewTestCommit(FIRST_AUTHOR_COMMITS_NUMBER)
-                .setAuthorName(FIRST_AUTHOR_NAME)
-                .setAuthorEmail(FIRST_AUTHOR_EMAIL);
-        commitsGenerator.createNewTestCommit(FIRST_AUTHOR_REVERTS_NUMBER, "Revert 1")
-                .setAuthorName(FIRST_AUTHOR_NAME)
-                .setAuthorEmail(FIRST_AUTHOR_EMAIL);
-
-        commitsGenerator.createNewTestCommit(SECOND_AUTHOR_COMMITS_NUMBER)
-                .setAuthorName(SECOND_AUTHOR_NAME)
-                .setAuthorEmail(SECOND_AUTHOR_EMAIL);
-        commitsGenerator.createNewTestCommit(SECOND_AUTHOR_REVERTS_NUMBER, "Revert 2")
-                .setAuthorName(SECOND_AUTHOR_NAME)
-                .setAuthorEmail(SECOND_AUTHOR_EMAIL);
-
-        commitsGenerator.createNewTestCommit(THIRD_AUTHOR_COMMITS_NUMBER)
-                .setAuthorName(THIRD_AUTHOR_NAME)
-                .setAuthorEmail(THIRD_AUTHOR_EMAIL);
-        commitsGenerator.createNewTestCommit(THIRD_AUTHOR_REVERTS_NUMBER, "Revert 3")
-                .setAuthorName(THIRD_AUTHOR_NAME)
-                .setAuthorEmail(THIRD_AUTHOR_EMAIL);
+        commitsGenerator.createNewTestCommit(commitsNumber)
+                .setAuthorName(authorName)
+                .setAuthorEmail(authorEmail);
+        commitsGenerator.createNewTestCommit(revertsNumber, "Revert message")
+                .setAuthorName(authorName)
+                .setAuthorEmail(authorEmail);
 
         List<Commit> commits = commitsGenerator.getCommits();
         RevertPercentageCalculator revertPercentageCalculator = new RevertPercentageCalculator(commits);
         List<RevertPercentageData> dataList = revertPercentageCalculator.generateStatistics();
 
-        assertEquals(findByAuthorName(dataList, FIRST_AUTHOR_NAME).getPercentage(), FIRST_AUTHOR_RATE, DELTA);
-        assertEquals(findByAuthorName(dataList, SECOND_AUTHOR_NAME).getPercentage(), SECOND_AUTHOR_RATE, DELTA);
-        assertEquals(findByAuthorName(dataList, THIRD_AUTHOR_NAME).getPercentage(), THIRD_AUTHOR_RATE, DELTA);
+        assertEquals(exptected, findByAuthorName(dataList, authorName).getPercentage(), DELTA);
     }
 }
