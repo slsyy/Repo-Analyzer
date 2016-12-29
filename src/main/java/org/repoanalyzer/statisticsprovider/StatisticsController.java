@@ -3,6 +3,7 @@ package org.repoanalyzer.statisticsprovider;
 
 import javafx.application.Application;
 import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.repoanalyzer.reporeader.IRepoReader;
 import org.repoanalyzer.reporeader.RepoReaderFactory;
@@ -21,6 +22,7 @@ import org.repoanalyzer.statisticsprovider.view.RepoReaderProgressBarView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -39,8 +41,8 @@ public class StatisticsController extends Application {
         new RepoPathReaderView(this).showStage(new Stage());
     }
 
-    public void createStatisticsView(String url){
-        repoReader = RepoReaderFactory.create(url);
+    public void createStatisticsView(String url, String authorFile){
+        repoReader = RepoReaderFactory.create(url, authorFile);
 
         Task<List<Commit>> task = new Task<List<Commit>>() {
             @Override
@@ -69,6 +71,16 @@ public class StatisticsController extends Application {
         });
 
         task.setOnFailed(workerStateEvent -> {
+            String name = "";
+            try {
+                task.get();
+            } catch (Exception e) {
+                name = e.getMessage();
+            }
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Something... something got broken and I couldn't be heard...");
+            alert.setHeaderText(name);
+            alert.showAndWait();
             repoReaderProgressBarView.getDialogStage().close();
         });
 
@@ -84,7 +96,6 @@ public class StatisticsController extends Application {
             commits = task.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
-            return;
         }
 
         List<IStatisticsComponent> statisticsComponents = new ArrayList<>();
