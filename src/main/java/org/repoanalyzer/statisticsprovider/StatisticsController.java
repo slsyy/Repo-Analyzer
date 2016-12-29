@@ -6,6 +6,9 @@ import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import org.repoanalyzer.reporeader.IRepoReader;
 import org.repoanalyzer.reporeader.RepoReaderFactory;
+import org.repoanalyzer.reporeader.exceptions.CannotOpenAuthorFileException;
+import org.repoanalyzer.reporeader.exceptions.InvalidJsonDataFormatException;
+import org.repoanalyzer.reporeader.exceptions.JsonParsingException;
 import org.repoanalyzer.reporeader.exceptions.RepositoryNotFoundOrInvalidException;
 import org.repoanalyzer.reporeader.commit.Commit;
 import org.repoanalyzer.statisticsprovider.statistics.*;
@@ -41,7 +44,7 @@ public class StatisticsController extends Application {
 
         Task<List<Commit>> task = new Task<List<Commit>>() {
             @Override
-            public List<Commit> call() throws InterruptedException, ExecutionException, RepositoryNotFoundOrInvalidException {
+            public List<Commit> call() throws InterruptedException, ExecutionException, RepositoryNotFoundOrInvalidException, JsonParsingException, CannotOpenAuthorFileException, InvalidJsonDataFormatException {
 
                 Future<List<Commit>> commitsFuture = null;
                 commitsFuture = repoReader.getCommits();
