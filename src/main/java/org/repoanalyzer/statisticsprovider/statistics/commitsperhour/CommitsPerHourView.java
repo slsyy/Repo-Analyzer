@@ -32,12 +32,13 @@ public class CommitsPerHourView {
     public void showStage(Stage stage){
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 380, 150, Color.WHITE);
-        root.setPrefSize(660,300);
+        stage.setResizable(false);
+        stage.setWidth(660);
+        stage.setHeight(280);
         GridPane gridpane = new GridPane();
         gridpane.setPadding(new Insets(5));
         gridpane.setHgap(5);
         gridpane.setVgap(5);
-
 
         for(Days day : Days.values())
             gridpane.add(new Text(day.getShortcut()),0,day.getNumber()+1);
@@ -52,10 +53,8 @@ public class CommitsPerHourView {
             }
         }
         showDesription(root);
-
         root.setCenter(gridpane);
-        stage.setWidth(660);
-        stage.setHeight(300);
+        stage.setTitle("Commits per hour of week day");
         stage.setScene(scene);
         stage.show();
     }

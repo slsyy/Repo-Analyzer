@@ -41,6 +41,7 @@ public class BalanceAddDeleteView {
 
         Scene scene = new Scene(bc, 500, 400, Color.WHITE);
         bc.getData().addAll(addSerie,deleteSerie);
+        stage.setTitle("Added and deleted lines");
         stage.setScene(scene);
         stage.show();
     }

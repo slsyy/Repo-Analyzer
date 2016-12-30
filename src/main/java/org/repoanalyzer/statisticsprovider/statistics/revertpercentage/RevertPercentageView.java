@@ -31,14 +31,15 @@ public class RevertPercentageView {
             authorSet.add(data.getAuthor().getFirstName());
         }
         spinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(authorSet));
-        BorderPane root = new BorderPane();
-        Scene scene = new Scene(root, 300, 300, Color.WHITE);
+
         stage.setTitle("Reverts statistic per user");
         spinner.getValueFactory().setValue(authorSet.get(0));
         ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
         chartData.addAll(new PieChart.Data("Revert", statisticData.get(0).getPercentage()),
                             new PieChart.Data("RestCommits", 100.0f - statisticData.get(0).getPercentage()));
         final PieChart chart = new PieChart(chartData);
+        chart.setMinSize(50,50);
+        chart.setMaxSize(1000,1000);
 
         spinner.valueProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -63,8 +64,7 @@ public class RevertPercentageView {
         gridpane.setVgap(5);
         gridpane.add(spinner,0,0);
         gridpane.add(chart,0,1);
-
-        root.setCenter(gridpane);
+        Scene scene = new Scene(gridpane, 400, 400, Color.WHITE);
         stage.setScene(scene);
         stage.show();
 
