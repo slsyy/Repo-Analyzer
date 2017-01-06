@@ -53,6 +53,6 @@ public class Author {
 
     @Override
     public String toString(){
-        return this.getFirstName();
+        return names.toString() + ":" + emails.toString();
     }
 }

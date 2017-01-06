@@ -89,4 +89,6 @@ public class AuthorProvider {
             throw new CannotOpenAuthorFileException();
         }
     }
+
+    public HashSet<Author> getAuthors() { return authors; }
 }

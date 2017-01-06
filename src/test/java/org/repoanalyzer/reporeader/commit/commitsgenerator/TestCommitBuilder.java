@@ -8,19 +8,13 @@ import org.repoanalyzer.reporeader.commit.CommitBuilder;
 
 public class TestCommitBuilder {
 
-    private static final String DEFAULT_AUTHOR_NAME = "DefaultAuthor";
-    private static final String DEFAULT_AUTHOR_EMAIL = "aa@bb.cc";
-    private static final String DEFAULT_HASH_CODE = "123";
-    private static final DateTime DEFAULT_DATE_TIME = new DateTime(0);
-    private static final String DEFAULT_EXAMPLE_MESSAGE = "ExampleMessage";
-
     private AuthorProvider authorProvider;
 
-    private  String authorName;
-    private  String authorEmail;
-    private  String hashCode;
-    private  DateTime dateTime;
-    private  String message;
+    private  String authorName = "DefaultAuthor";
+    private  String authorEmail = "aa@bb.cc";
+    private  String hashCode = "123";
+    private  DateTime dateTime = new DateTime(0);
+    private  String message = "ExampleMessage";
     private int deletedLinesNumber;
     private int addedLinesNumber;
     private int changedLinesNumber;
@@ -42,13 +36,11 @@ public class TestCommitBuilder {
     public TestCommitBuilder setHashCode(String hashCode) {
         this.hashCode = hashCode;
         return this;
-
     }
 
     public TestCommitBuilder setDateTime(DateTime dateTime) {
         this.dateTime = dateTime;
         return this;
-
     }
 
     public TestCommitBuilder setMessage(String message) {
@@ -72,12 +64,6 @@ public class TestCommitBuilder {
     }
 
     public Commit createCommit() {
-        authorName = authorName != null ? authorName : DEFAULT_AUTHOR_NAME;
-        authorEmail = authorEmail != null ? authorEmail : DEFAULT_AUTHOR_EMAIL;
-        hashCode = hashCode != null ? hashCode : DEFAULT_HASH_CODE;
-        dateTime = dateTime != null ? dateTime : DEFAULT_DATE_TIME;
-        message = message != null ? message : DEFAULT_EXAMPLE_MESSAGE;
-
         CommitBuilder commitBuilder = new CommitBuilder(authorProvider, authorName, authorEmail, hashCode, dateTime, message);
         commitBuilder.setChangedLinesNumber(changedLinesNumber).setAddedLinesNumber(addedLinesNumber).setDeletedLinesNumber(deletedLinesNumber);
 

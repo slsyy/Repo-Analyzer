@@ -54,7 +54,7 @@ final public class Commit {
     public String toString() {
         return "Commit{" +
                 "hashCode='" + hashCode + '\'' +
-                ", author=" + author +
+                ", author=" + author.getFirstName() +
                 ", dateTime=" + dateTime +
                 ", message='" + message + '\'' +
                 ", deletedLinesNumber=" + deletedLinesNumber +

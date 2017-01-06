@@ -154,10 +154,4 @@ public class GitRepoReader extends AbstractRepoReader {
 
         return result;
     }
-
-    public static void main(String[] args) throws RepositoryNotFoundOrInvalidException, JsonParsingException, CannotOpenAuthorFileException, InvalidJsonDataFormatException, ExecutionException, InterruptedException {
-        Future<List<Commit>> future = new GitRepoReader("/home/linux/Desktop/Repo-Analyzer").getCommits();
-        while(!future.isDone());
-        future.get().forEach(System.out::println);
-    }
 }
