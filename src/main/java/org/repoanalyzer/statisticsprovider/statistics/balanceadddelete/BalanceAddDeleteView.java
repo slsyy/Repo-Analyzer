@@ -1,12 +1,18 @@
 package org.repoanalyzer.statisticsprovider.statistics.balanceadddelete;
 
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Pagination;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.LinearGradient;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.util.List;
 
@@ -16,6 +22,7 @@ import java.util.List;
 public class BalanceAddDeleteView {
 
     private List<BalanceAddDeleteData> dataList;
+    private final Integer maxSeriesPrPage = 20;
 
     public BalanceAddDeleteView(List<BalanceAddDeleteData> data) {
         this.dataList = data;
@@ -29,20 +36,37 @@ public class BalanceAddDeleteView {
         xAxis.setLabel("Author");
         yAxis.setLabel("Value");
 
-        XYChart.Series addSerie = new XYChart.Series();
-        addSerie.setName("Added lines");
-        XYChart.Series deleteSerie = new XYChart.Series();
-        deleteSerie.setName("Deleted lines");
+        Pagination pagination = new Pagination(dataList.size()/maxSeriesPrPage + 1);
+        pagination.setPageFactory(new Callback<Integer, Node>() {
+            @Override
+            public Node call(Integer param) {
+                bc.getData().clear();
+                bc.getData().retainAll();
 
-        for(BalanceAddDeleteData data : dataList){
-            addSerie.getData().add(new XYChart.Data(data.getAuthor().getFirstName(), data.getAddedLines()));
-            deleteSerie.getData().add(new XYChart.Data(data.getAuthor().getFirstName(), data.getDeletedLines()));
-        }
+                XYChart.Series addSerie = new XYChart.Series();
+                addSerie.setName("Added lines");
+                XYChart.Series deleteSerie = new XYChart.Series();
+                deleteSerie.setName("Deleted lines");
+                int i = 0;
+                while(i<maxSeriesPrPage && dataList.size() > i+ param*maxSeriesPrPage) {
+                    addSerie.getData().add(new XYChart.Data(dataList.get(param*maxSeriesPrPage + i).getAuthor().getFirstName(), dataList.get(param*maxSeriesPrPage + i).getAddedLines()));
+                    deleteSerie.getData().add(new XYChart.Data(dataList.get(param*maxSeriesPrPage + i).getAuthor().getFirstName(), dataList.get(param*maxSeriesPrPage + i).getDeletedLines()));
+                    i++;
+                }
+                bc.getData().addAll(addSerie,deleteSerie);
+                return new VBox();
+            }
+        });
 
-        Scene scene = new Scene(bc, 500, 400, Color.WHITE);
-        bc.getData().addAll(addSerie,deleteSerie);
+        GridPane gp = new GridPane();
+        gp.add(bc,0,0);
+        gp.add(pagination,0,1);
+
+        Scene scene = new Scene(gp, 500, 400, Color.WHITE);
         stage.setTitle("Added and deleted lines");
         stage.setScene(scene);
         stage.show();
     }
+
+
 }

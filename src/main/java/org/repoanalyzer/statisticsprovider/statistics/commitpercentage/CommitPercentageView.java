@@ -1,6 +1,7 @@
 package org.repoanalyzer.statisticsprovider.statistics.commitpercentage;
 
 
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
@@ -26,6 +27,16 @@ public class CommitPercentageView {
         }
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(data1);
         final PieChart chart = new PieChart(pieChartData);
+
+
+        pieChartData.forEach(data ->
+                data.nameProperty().bind(
+                        Bindings.concat(
+                                data.getName(), "(", data.pieValueProperty().longValue(), ")"
+                        )
+                )
+        );
+
         chart.setMinSize(50,50);
         chart.setMaxSize(1000,1000);
         chart.setTitle("Commits");
