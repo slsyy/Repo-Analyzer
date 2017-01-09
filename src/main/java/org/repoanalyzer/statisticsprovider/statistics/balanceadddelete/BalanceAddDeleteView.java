@@ -1,5 +1,6 @@
 package org.repoanalyzer.statisticsprovider.statistics.balanceadddelete;
 
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
@@ -54,6 +55,7 @@ public class BalanceAddDeleteView {
                     i++;
                 }
                 bc.getData().addAll(addSerie,deleteSerie);
+                stage.setWidth(4000*bc.getData().size()/maxSeriesPrPage);
                 return new VBox();
             }
         });
@@ -62,7 +64,7 @@ public class BalanceAddDeleteView {
         gp.add(bc,0,0);
         gp.add(pagination,0,1);
 
-        Scene scene = new Scene(gp, 500, 400, Color.WHITE);
+        Scene scene = new Scene(gp, 700, 400, Color.WHITE);
         stage.setTitle("Added and deleted lines");
         stage.setScene(scene);
         stage.show();

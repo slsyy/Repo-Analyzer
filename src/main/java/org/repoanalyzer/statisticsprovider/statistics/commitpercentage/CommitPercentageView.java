@@ -7,6 +7,10 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -41,7 +45,18 @@ public class CommitPercentageView {
         chart.setMaxSize(1000,1000);
         chart.setTitle("Commits");
 
-        Scene scene = new Scene(chart,500,500, Color.WHITE);
+        GridPane gridPane = new GridPane();
+        gridPane.add(chart, 0, 0);
+        ColumnConstraints cc = new ColumnConstraints();
+        cc.setHgrow(Priority.ALWAYS);
+        RowConstraints rc = new RowConstraints();
+        rc.setVgrow(Priority.ALWAYS);
+        gridPane.getColumnConstraints().add(cc);
+        gridPane.getRowConstraints().add(rc);
+
+
+
+        Scene scene = new Scene(gridPane,500,500, Color.WHITE);
         stage.setTitle("Commits statistic");
         stage.setScene(scene);
         stage.show();
