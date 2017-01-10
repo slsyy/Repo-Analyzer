@@ -81,11 +81,10 @@ public class AuthorProviderTest {
 
         //when
         authorProvider.addAuthorsFromFile(testFilePath);
-        String authors = authorProvider.getAuthors().toString();
 
         //then
-        assertEquals(authorProvider.getAuthors().size(),2);
-        assertTrue(authors.contains(author1));
-        assertTrue(authors.contains(author2));
+        assertEquals(authorProvider.getAuthorsSize(),2);
+        assertTrue(authorProvider.doesSetAsStringContainsAuthor(author1));
+        assertTrue(authorProvider.doesSetAsStringContainsAuthor(author2));
     }
 }

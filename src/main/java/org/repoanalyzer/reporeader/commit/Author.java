@@ -37,12 +37,14 @@ public class Author {
         return emails;
     }
 
-    public void addName(String name) {
-        names.add(name);
+    public void addNameIfNotExists(String name) {
+        if (!names.contains(name))
+            names.add(name);
     }
 
-    public void addEmail(String email) {
-        emails.add(email);
+    public void addEmailIfNotExists(String email) {
+        if (!emails.contains(email))
+            emails.add(email);
     }
 
     public void addCommit(Commit commit) {

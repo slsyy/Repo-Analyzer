@@ -37,18 +37,4 @@ public class CommitTest {
         assertEquals(commit.getAddedLinesNumber(), addedLinesNumber);
         assertEquals(commit.getChangedLinesNumber(), changedLinesNumber);
     }
-
-    @Test
-    public void commitToStringTest() throws Exception {
-        //given
-
-        //when
-        Commit commit = new Commit("hash", author, date, "message", 0, 0, 0);
-
-        //then
-        assertEquals(commit.toString(),
-                "Commit{hashCode='hash', author=name, dateTime=1970-01-01T01:00:00.000+01:00, message='message'"
-                        + ", deletedLinesNumber=0, addedLinesNumber=0, changedLinesNumber=0}"
-        );
-    }
 }

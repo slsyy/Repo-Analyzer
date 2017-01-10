@@ -4,6 +4,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.repoanalyzer.reporeader.exceptions.AuthorNotFoundException;
 import org.repoanalyzer.reporeader.exceptions.CannotOpenAuthorFileException;
 import org.repoanalyzer.reporeader.exceptions.InvalidJsonDataFormatException;
 import org.repoanalyzer.reporeader.exceptions.JsonParsingException;
@@ -21,43 +22,23 @@ public class AuthorProvider {
     }
 
     public Author getCreateOrUpdateAuthor(String name, String email) {
-        Author author = null;
-        Boolean foundName = false;
-        Boolean foundMail = false;
+        Author author;
 
-        for (Author a : authors)
-            if (a.getNames().contains(name)) {
-                author = a;
-                foundName = true;
-                break;
-            }
+        try {
+            author = getByEmailOrName(name, email);
 
-        if (foundName && author.getEmails().contains(email))
-            foundMail = true;
-        else if (!foundName) {
-            for (Author a : authors)
-                if (a.getEmails().contains(email)) {
-                    author = a;
-                    foundMail = true;
-                    break;
-                }
+            author.addNameIfNotExists(name);
+            author.addEmailIfNotExists(email);
+        } catch (AuthorNotFoundException e) {
+            author = createNewAuthor(name, email);
         }
-
-        if (!foundName && !foundMail) {
-            author = new Author(name, email);
-            authors.add(author);
-        }
-        else if (!foundName)
-            author.addName(name);
-        else if (!foundMail)
-            author.addEmail(email);
 
         return author;
     }
 
     public void addAuthorsFromFile (String authorFile) throws CannotOpenAuthorFileException,
             InvalidJsonDataFormatException, JsonParsingException {
-        try{
+        try {
             JSONParser parser = new JSONParser();
             Object objectArrayOfAuthors = parser.parse(new FileReader(authorFile));
 
@@ -77,18 +58,50 @@ public class AuthorProvider {
                 Author author = new Author(authorName);
                 for (Object authorMail : jsonAuthorMails) {
                     if (!(authorMail instanceof String)) throw new InvalidJsonDataFormatException();
-                    author.addEmail((String) authorMail);
+                    author.addEmailIfNotExists((String) authorMail);
                 }
                 authors.add(author);
             }
-        }catch(ParseException pe){
+        } catch (ParseException pe) {
             throw new JsonParsingException(pe.getPosition());
-        } catch (FileNotFoundException e) {
-            throw new CannotOpenAuthorFileException();
         } catch (IOException e) {
             throw new CannotOpenAuthorFileException();
         }
     }
 
-    public HashSet<Author> getAuthors() { return authors; }
+    public int getAuthorsSize() {
+        return authors.size();
+    }
+
+    public boolean doesSetAsStringContainsAuthor(String author) {
+        return authors.toString().contains(author);
+    }
+
+    private Author getByEmailOrName(String name, String email) throws AuthorNotFoundException {
+        try {
+            return this.getByEmail(email);
+        } catch (AuthorNotFoundException e) {
+            return this.findByName(name);
+        }
+    }
+
+    private Author getByEmail(String email) throws AuthorNotFoundException{
+        for (Author a : authors)
+            if (a.getEmails().contains(email))
+                return a;
+        throw new AuthorNotFoundException();
+    }
+
+    private Author findByName(String name) throws AuthorNotFoundException{
+        for (Author a : authors)
+            if (a.getNames().contains(name))
+                return a;
+        throw new AuthorNotFoundException();
+    }
+
+    private  Author createNewAuthor(String name, String email) {
+        Author author = new Author(name, email);
+        authors.add(author);
+        return author;
+    }
 }

@@ -15,10 +15,7 @@ import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.repoanalyzer.reporeader.AbstractRepoReader;
 import org.repoanalyzer.reporeader.Progress;
-import org.repoanalyzer.reporeader.exceptions.CannotOpenAuthorFileException;
-import org.repoanalyzer.reporeader.exceptions.InvalidJsonDataFormatException;
-import org.repoanalyzer.reporeader.exceptions.JsonParsingException;
-import org.repoanalyzer.reporeader.exceptions.RepositoryNotFoundOrInvalidException;
+import org.repoanalyzer.reporeader.exceptions.*;
 import org.repoanalyzer.reporeader.commit.AuthorProvider;
 import org.repoanalyzer.reporeader.commit.Commit;
 
@@ -64,9 +61,7 @@ public class GitRepoReader extends AbstractRepoReader {
     }
 
     public Progress getProgress() {
-        Progress progress = new Progress();
-        progress.setWorkDone(this.progress.get());
-        progress.setMax(this.size);
+        Progress progress = new Progress(this.progress.get(), this.size);
         return progress;
     }
 
@@ -139,17 +134,22 @@ public class GitRepoReader extends AbstractRepoReader {
                 throw new RepositoryNotFoundOrInvalidException();
             }
 
-            CommitBuilder commitBuilder = new CommitBuilder(authorProvider,
-                    commit.getCommitterIdent().getName(),
-                    commit.getCommitterIdent().getEmailAddress(),
-                    commit.getName(),
-                    new DateTime(((long) commit.getCommitTime()) * 1000),
-                    commit.getFullMessage());
+            CommitBuilder commitBuilder = new CommitBuilder(authorProvider);
 
-            result.add(commitBuilder.setAddedLinesNumber(addedLinesNumber)
-                    .setDeletedLinesNumber(deletedLinesNumber)
-                    .setChangedLinesNumber(changedLinesNumber)
-                    .createCommit());
+            try {
+                result.add(commitBuilder.setAuthorName(commit.getCommitterIdent().getName())
+                        .setAuthorEmail(commit.getCommitterIdent().getEmailAddress())
+                        .setHashCode(commit.getName())
+                        .setDateTime(new DateTime(((long) commit.getCommitTime()) * 1000))
+                        .setMessage(commit.getFullMessage())
+                        .setAddedLinesNumber(addedLinesNumber)
+                        .setDeletedLinesNumber(deletedLinesNumber)
+                        .setChangedLinesNumber(changedLinesNumber)
+                        .createCommit());
+            } catch (IncompleteCommitInfoException exception) {
+                System.out.print(exception.getMessage());
+                System.out.println(" Skipping commit.");
+            }
         }
 
         return result;

@@ -5,6 +5,7 @@ import org.joda.time.DateTime;
 import org.repoanalyzer.reporeader.commit.AuthorProvider;
 import org.repoanalyzer.reporeader.commit.Commit;
 import org.repoanalyzer.reporeader.commit.CommitBuilder;
+import org.repoanalyzer.reporeader.exceptions.IncompleteCommitInfoException;
 
 public class TestCommitBuilder {
 
@@ -64,10 +65,21 @@ public class TestCommitBuilder {
     }
 
     public Commit createCommit() {
-        CommitBuilder commitBuilder = new CommitBuilder(authorProvider, authorName, authorEmail, hashCode, dateTime, message);
-        commitBuilder.setChangedLinesNumber(changedLinesNumber).setAddedLinesNumber(addedLinesNumber).setDeletedLinesNumber(deletedLinesNumber);
+        CommitBuilder commitBuilder = new CommitBuilder(authorProvider);
 
-        return commitBuilder.createCommit();
+        try {
+            return commitBuilder.setAuthorName(authorName)
+                                .setAuthorEmail(authorEmail)
+                                .setHashCode(hashCode)
+                                .setDateTime(dateTime)
+                                .setMessage(message)
+                                .setChangedLinesNumber(changedLinesNumber)
+                                .setAddedLinesNumber(addedLinesNumber)
+                                .setDeletedLinesNumber(deletedLinesNumber)
+                                .createCommit();
+        } catch (IncompleteCommitInfoException e) {
+            return null;
+        }
     }
 
 }

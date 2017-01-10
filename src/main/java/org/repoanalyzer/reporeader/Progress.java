@@ -1,20 +1,20 @@
 package org.repoanalyzer.reporeader;
 
 public class Progress {
-    private long workDone;
-    private long max;
+    private final long workDone;
+    private final long max;
 
-    public long getWorkDone() { return workDone; }
-
-    public void setWorkDone(long workDone) {
+    public Progress (long workDone, long max) {
         this.workDone = workDone;
+        this.max = max;
+    }
+
+    public long getWorkDone() {
+        return workDone;
     }
 
     public long getMax() {
         return max;
     }
 
-    public void setMax(long max) {
-        this.max = max;
-    }
 }
