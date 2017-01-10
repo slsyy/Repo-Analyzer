@@ -113,8 +113,11 @@ public class GitRepoReader extends AbstractRepoReader {
             try {
                 newTreeIter = new CanonicalTreeParser(null, reader, commit.getTree());
 
-                if (commit.getParentCount() < 1) oldTreeIter = new EmptyTreeIterator();
-                else oldTreeIter = new CanonicalTreeParser(null, reader, commit.getParent(0).getTree());
+                int parents = commit.getParentCount();
+
+                if (parents < 1) oldTreeIter = new EmptyTreeIterator();
+                else if (parents == 1) oldTreeIter = new CanonicalTreeParser(null, reader, commit.getParent(0).getTree());
+                else continue;
 
                 for (DiffEntry entry : diffFormatter.scan(oldTreeIter, newTreeIter)) {
                     for (Edit edit : diffFormatter.toFileHeader(entry).toEditList()) {
