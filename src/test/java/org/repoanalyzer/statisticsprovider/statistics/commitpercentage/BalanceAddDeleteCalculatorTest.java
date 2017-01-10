@@ -61,9 +61,9 @@ public class BalanceAddDeleteCalculatorTest {
         for(int i = 0; i < addedAndDeleted.length; i += 2){
             commitsGenerator.createNewTestCommit()
                     .setAuthorName(authorName)
-                    .setAuthorEmail(authorEmail).
-                    setAddedLinesNumber(addedAndDeleted[i]).
-                    setDeletedLinesNumber(addedAndDeleted[i+1]);
+                    .setAuthorEmail(authorEmail)
+                    .setAddedLinesNumber(addedAndDeleted[i])
+                    .setDeletedLinesNumber(addedAndDeleted[i+1]);
         }
 
 
@@ -76,5 +76,3 @@ public class BalanceAddDeleteCalculatorTest {
     }
 
 }
-
-

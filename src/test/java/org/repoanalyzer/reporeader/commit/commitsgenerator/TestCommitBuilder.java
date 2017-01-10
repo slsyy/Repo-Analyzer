@@ -14,7 +14,7 @@ public class TestCommitBuilder {
     private  String authorName = "DefaultAuthor";
     private  String authorEmail = "aa@bb.cc";
     private  String hashCode = "123";
-    private  DateTime dateTime = new DateTime(0);
+    private  DateTime dateTime = new DateTime(1);
     private  String message = "ExampleMessage";
     private int deletedLinesNumber;
     private int addedLinesNumber;
