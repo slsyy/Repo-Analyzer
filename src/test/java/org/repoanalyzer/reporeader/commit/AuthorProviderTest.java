@@ -3,8 +3,6 @@ package org.repoanalyzer.reporeader.commit;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Iterator;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -69,22 +67,5 @@ public class AuthorProviderTest {
         assertTrue(author.getNames().contains(name2));
         assertEquals(author.getEmails().size(), 1);
         assertTrue(author.getEmails().contains(mail));
-    }
-
-    @Test
-    public void addAuthorsFromFileTest() throws Exception {
-        //given
-        String testFilePath = System.getProperty("user.dir")
-                + "\\src\\test\\java\\org\\repoanalyzer\\reporeader\\commit\\TestAuthors.json";
-        String author1 = "[name2]:[mail3]";
-        String author2 = "[name1]:[mail1, mail2]";
-
-        //when
-        authorProvider.addAuthorsFromFile(testFilePath);
-
-        //then
-        assertEquals(authorProvider.getAuthorsSize(),2);
-        assertTrue(authorProvider.doesSetAsStringContainsAuthor(author1));
-        assertTrue(authorProvider.doesSetAsStringContainsAuthor(author2));
     }
 }

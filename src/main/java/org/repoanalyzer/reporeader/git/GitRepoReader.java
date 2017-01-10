@@ -15,6 +15,7 @@ import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.repoanalyzer.reporeader.AbstractRepoReader;
 import org.repoanalyzer.reporeader.Progress;
+import org.repoanalyzer.reporeader.commit.FilePreloadedAuthorProvider;
 import org.repoanalyzer.reporeader.exceptions.*;
 import org.repoanalyzer.reporeader.commit.AuthorProvider;
 import org.repoanalyzer.reporeader.commit.Commit;
@@ -39,19 +40,21 @@ public class GitRepoReader extends AbstractRepoReader {
         super(new File(url, ".git").toString(), authorFile);
     }
 
-    public Future<List<Commit>> getCommits() throws RepositoryNotFoundOrInvalidException, JsonParsingException, CannotOpenAuthorFileException, InvalidJsonDataFormatException {
+    public Future<List<Commit>> getCommits() throws RepositoryNotFoundOrInvalidException,
+                                                    JsonParsingException,
+                                                    CannotOpenAuthorFileException,
+                                                    InvalidJsonDataFormatException {
         this.progress = new AtomicInteger();
         this.size = 0;
 
-        Repository repo = buildRepository();
+        Repository repo = this.buildRepository();
         Git git = new Git(repo);
 
-        for (RevCommit commit : getRevCommitsFromRepository(git)) this.size++;
+        for (RevCommit commit : this.getRevCommitsFromRepository(git)) this.size++;
 
-        AuthorProvider authorProvider = new AuthorProvider();
-        if (!this.authorFile.isEmpty()) authorProvider.addAuthorsFromFile(this.authorFile);
-
-        Callable<List<Commit>> task = () -> analyzeRepository(repo, authorProvider, getRevCommitsFromRepository(git));
+        Callable<List<Commit>> task = () -> this.analyzeRepository(repo,
+                                                                   this.prepareAuthorProvider(),
+                                                                   this.getRevCommitsFromRepository(git));
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<List<Commit>> future = executor.submit(task);
@@ -78,8 +81,8 @@ public class GitRepoReader extends AbstractRepoReader {
     private Repository buildRepository() throws RepositoryNotFoundOrInvalidException {
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         builder.setGitDir(new File(this.url))
-                .readEnvironment()
-                .findGitDir();
+               .readEnvironment()
+               .findGitDir();
         Repository repo = null;
         try {
             repo = builder.build();
@@ -138,20 +141,30 @@ public class GitRepoReader extends AbstractRepoReader {
 
             try {
                 result.add(commitBuilder.setAuthorName(commit.getCommitterIdent().getName())
-                        .setAuthorEmail(commit.getCommitterIdent().getEmailAddress())
-                        .setHashCode(commit.getName())
-                        .setDateTime(new DateTime(((long) commit.getCommitTime()) * 1000))
-                        .setMessage(commit.getFullMessage())
-                        .setAddedLinesNumber(addedLinesNumber)
-                        .setDeletedLinesNumber(deletedLinesNumber)
-                        .setChangedLinesNumber(changedLinesNumber)
-                        .createCommit());
+                                        .setAuthorEmail(commit.getCommitterIdent().getEmailAddress())
+                                        .setHashCode(commit.getName())
+                                        .setDateTime(new DateTime(((long) commit.getCommitTime()) * 1000))
+                                        .setMessage(commit.getFullMessage())
+                                        .setAddedLinesNumber(addedLinesNumber)
+                                        .setDeletedLinesNumber(deletedLinesNumber)
+                                        .setChangedLinesNumber(changedLinesNumber)
+                                        .createCommit());
             } catch (IncompleteCommitInfoException exception) {
                 System.out.print(exception.getMessage());
-                System.out.println(" Skipping commit.");
+                System.out.println(" - Skipping commit.");
             }
         }
 
         return result;
+    }
+
+    private AuthorProvider prepareAuthorProvider() {
+        try {
+            return new FilePreloadedAuthorProvider(this.authorFile);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Ignoring provided file with authors.");
+            return new AuthorProvider();
+        }
     }
 }

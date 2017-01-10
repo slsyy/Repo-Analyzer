@@ -1,12 +1,7 @@
 package org.repoanalyzer.reporeader.exceptions;
 
 public class JsonParsingException extends Exception {
-    private int lane;
-
     public JsonParsingException(int lane) {
-        super();
-        this.lane = lane;
+        super("Error occurred while parsing provided file with authors - expecting JSON, lane: " + Integer.toString(lane));
     }
-
-    public int getLaneNumber() { return this.lane; }
 }
