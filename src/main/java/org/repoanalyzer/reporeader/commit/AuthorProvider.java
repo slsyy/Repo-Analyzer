@@ -1,5 +1,6 @@
 package org.repoanalyzer.reporeader.commit;
 
+import com.google.common.collect.ImmutableSet;
 import org.repoanalyzer.reporeader.exceptions.AuthorNotFoundException;
 
 import java.util.HashSet;
@@ -32,6 +33,10 @@ public class AuthorProvider {
 
     public boolean doesSetAsStringContainsAuthor(String author) {
         return authors.toString().contains(author);
+    }
+
+    public ImmutableSet<Author> getImmutableAuthorsSet() {
+        return ImmutableSet.copyOf(authors);
     }
 
     private Author getByEmailOrName(String name, String email) throws AuthorNotFoundException {

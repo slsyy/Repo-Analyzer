@@ -14,17 +14,13 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.repoanalyzer.reporeader.AbstractRepoReader;
-import org.repoanalyzer.reporeader.Progress;
-import org.repoanalyzer.reporeader.commit.FilePreloadedAuthorProvider;
+import org.repoanalyzer.reporeader.commit.*;
 import org.repoanalyzer.reporeader.exceptions.*;
-import org.repoanalyzer.reporeader.commit.AuthorProvider;
-import org.repoanalyzer.reporeader.commit.Commit;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.joda.time.DateTime;
-import org.repoanalyzer.reporeader.commit.CommitBuilder;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -52,20 +48,14 @@ public class GitRepoReader extends AbstractRepoReader {
 
         for (RevCommit commit : this.getRevCommitsFromRepository(git)) this.size++;
 
-        Callable<List<Commit>> task = () -> this.analyzeRepository(repo,
-                                                                   this.prepareAuthorProvider(),
-                                                                   this.getRevCommitsFromRepository(git));
+        prepareAuthorProvider();
+        Callable<List<Commit>> task = () -> this.analyzeRepository(repo, this.getRevCommitsFromRepository(git));
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<List<Commit>> future = executor.submit(task);
         executor.shutdown();
 
         return future;
-    }
-
-    public Progress getProgress() {
-        Progress progress = new Progress(this.progress.get(), this.size);
-        return progress;
     }
 
     private Iterable<RevCommit> getRevCommitsFromRepository(Git git) throws RepositoryNotFoundOrInvalidException {
@@ -92,9 +82,8 @@ public class GitRepoReader extends AbstractRepoReader {
         return repo;
     }
 
-    private List<Commit> analyzeRepository(Repository repo,
-                                           AuthorProvider authorProvider,
-                                           final Iterable<RevCommit> commits) throws RepositoryNotFoundOrInvalidException {
+    private List<Commit> analyzeRepository(Repository repo, final Iterable<RevCommit> commits)
+            throws RepositoryNotFoundOrInvalidException {
         List<Commit> result = new LinkedList<>();
 
         DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
@@ -159,15 +148,5 @@ public class GitRepoReader extends AbstractRepoReader {
         }
 
         return result;
-    }
-
-    private AuthorProvider prepareAuthorProvider() {
-        try {
-            return new FilePreloadedAuthorProvider(this.authorFile);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("Ignoring provided file with authors.");
-            return new AuthorProvider();
-        }
     }
 }
