@@ -14,15 +14,8 @@ public class CommitPercentageData {
         return authorName;
     }
 
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
-    }
-
     public int getAuthorCommitsNumber() {
         return authorCommitsNumber;
     }
 
-    public void setAuthorCommitsNumber(int authorCommitsNumber) {
-        this.authorCommitsNumber = authorCommitsNumber;
-    }
 }

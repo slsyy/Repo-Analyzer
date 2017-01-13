@@ -15,6 +15,7 @@ import javafx.scene.paint.LinearGradient;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -36,6 +37,18 @@ public class BalanceAddDeleteView {
                 new BarChart<>(xAxis,yAxis);
         xAxis.setLabel("Author");
         yAxis.setLabel("Value");
+
+        dataList.sort(new Comparator<BalanceAddDeleteData>() {
+            @Override
+            public int compare(BalanceAddDeleteData o1, BalanceAddDeleteData o2) {
+                if(o1.getMaxFromAddedAndDeleted() >  o2.getMaxFromAddedAndDeleted())
+                    return -1;
+                else if(o1.getMaxFromAddedAndDeleted() <  o2.getMaxFromAddedAndDeleted())
+                    return 1;
+                else
+                    return 0;
+            }
+        });
 
         Pagination pagination = new Pagination(dataList.size()/maxSeriesPrPage + 1);
         pagination.setPageFactory(new Callback<Integer, Node>() {

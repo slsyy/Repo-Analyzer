@@ -6,33 +6,19 @@ import org.repoanalyzer.reporeader.commit.Commit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class CommitPercentageCalculator {
-    private List<Commit> commits;
+    private Set<Author> authors;
 
-    public CommitPercentageCalculator(List<Commit> commits) {
-        this.commits = commits;
+    public CommitPercentageCalculator(Set<Author> authors) {
+        this.authors = authors;
     }
 
     public List<CommitPercentageData> generateData(){
         List<CommitPercentageData> data = new ArrayList<>();
-
-        List<Author> authors = new ArrayList<Author>();
-
-        for(Commit commit: commits){
-            if(!authors.contains(commit.getAuthor())){
-                authors.add(commit.getAuthor());
-            }
-        }
-
         for(Author author: authors){
-            int authorCommitsNumber = 0;
-            for(Commit commit: commits) {
-                if (author.equals(commit.getAuthor())) {
-                    authorCommitsNumber++;
-                }
-            }
-            data.add(new CommitPercentageData(author.getFirstName(), authorCommitsNumber));
+            data.add(new CommitPercentageData(author.getFirstName(),author.getCommits().size()));
         }
         return data;
     }

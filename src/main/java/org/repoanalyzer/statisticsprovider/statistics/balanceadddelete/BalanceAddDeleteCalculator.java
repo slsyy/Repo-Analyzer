@@ -5,36 +5,27 @@ import org.repoanalyzer.reporeader.commit.Commit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Jakub on 2016-12-18.
  */
 public class BalanceAddDeleteCalculator {
-    private List<Commit> commits;
+    private Set<Author> authors;
 
-    public BalanceAddDeleteCalculator(List<Commit> commits) {
-        this.commits = commits;
+    public BalanceAddDeleteCalculator(Set<Author> authors) {
+        this.authors = authors;
     }
 
     public List<BalanceAddDeleteData> generateData(){
         List<BalanceAddDeleteData> result = new ArrayList<>();
-        for(Commit commit : commits){
-            Author author = commit.getAuthor();
-            Boolean newData = true;
-            for(BalanceAddDeleteData data : result){
-                if(data.getAuthor().equals(author)){
-                    newData = false;
-                    data.addAddedLines(commit.getAddedLinesNumber());
-                    data.addDeletedLines(commit.getDeletedLinesNumber());
-                    break;
-                }
-            }
-            if(newData){
-                BalanceAddDeleteData data = new BalanceAddDeleteData(author);
-                data.addDeletedLines(commit.getDeletedLinesNumber());
+        for(Author author : authors){
+            BalanceAddDeleteData data = new BalanceAddDeleteData(author);
+            for(Commit commit : author.getCommits()){
                 data.addAddedLines(commit.getAddedLinesNumber());
-                result.add(data);
+                data.addDeletedLines(commit.getDeletedLinesNumber());
             }
+            result.add(data);
         }
         return result;
     }

@@ -2,11 +2,18 @@ package org.repoanalyzer.statisticsprovider.statistics.commitpercentage;
 
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -25,21 +32,36 @@ public class CommitPercentageView {
     }
 
     public void showStage(Stage stage){
-        List<PieChart.Data> data1 = new ArrayList<>();
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+
+        GridPane checkBoxesPane = new GridPane();
+        int index = 0;
         for(CommitPercentageData d: data){
-            data1.add(new PieChart.Data(d.getAuthorName(), d.getAuthorCommitsNumber()));
+            PieChart.Data data1 = new PieChart.Data(d.getAuthorName()+ " (" + d.getAuthorCommitsNumber() + ")",
+                    d.getAuthorCommitsNumber());
+            pieChartData.add(data1);
+            CheckBox checkBox = new CheckBox(d.getAuthorName()+ " (" + d.getAuthorCommitsNumber() + ")");
+            checkBox.setSelected(true);
+            checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    try {
+                        checkBox.setSelected(newValue);
+                        if(newValue){
+                            pieChartData.add(data1);
+                        }else {
+                            pieChartData.remove(data1);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            checkBoxesPane.add(checkBox,0,index);
+            index++;
         }
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(data1);
         final PieChart chart = new PieChart(pieChartData);
-
-
-        pieChartData.forEach(data ->
-                data.nameProperty().bind(
-                        Bindings.concat(
-                                data.getName(), "(", data.pieValueProperty().longValue(), ")"
-                        )
-                )
-        );
 
         chart.setMinSize(50,50);
         chart.setMaxSize(1000,1000);
@@ -55,6 +77,9 @@ public class CommitPercentageView {
         gridPane.getRowConstraints().add(rc);
 
 
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setContent(checkBoxesPane);
+        gridPane.add(scrollPane, 1, 0);
 
         Scene scene = new Scene(gridPane,500,500, Color.WHITE);
         stage.setTitle("Commits statistic");

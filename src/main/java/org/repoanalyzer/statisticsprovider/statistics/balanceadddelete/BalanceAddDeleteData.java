@@ -35,4 +35,8 @@ public class BalanceAddDeleteData {
     public void addDeletedLines(Integer i){
         deletedLines += i;
     }
+
+    public Integer getMaxFromAddedAndDeleted(){
+        return addedLines > deletedLines ? addedLines : deletedLines;
+    }
 }

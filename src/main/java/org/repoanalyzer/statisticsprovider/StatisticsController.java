@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.repoanalyzer.reporeader.IRepoReader;
 import org.repoanalyzer.reporeader.RepoReaderFactory;
+import org.repoanalyzer.reporeader.commit.Author;
 import org.repoanalyzer.reporeader.exceptions.CannotOpenAuthorFileException;
 import org.repoanalyzer.reporeader.exceptions.InvalidJsonDataFormatException;
 import org.repoanalyzer.reporeader.exceptions.JsonParsingException;
@@ -23,6 +24,7 @@ import org.repoanalyzer.statisticsprovider.view.RepoReaderProgressBarView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -92,6 +94,7 @@ public class StatisticsController extends Application {
 
     private void createStatisticsComponents(Task<List<Commit>> task) {
         List<Commit> commits = null;
+        Set<Author> authors = repoReader.getAuthors();
         try {
             commits = task.get();
         } catch (InterruptedException | ExecutionException e) {
@@ -100,9 +103,9 @@ public class StatisticsController extends Application {
 
         List<IStatisticsComponent> statisticsComponents = new ArrayList<>();
         statisticsComponents.add(new CommitsPerHourComponent(commits));
-        statisticsComponents.add(new CommitPercentageComponent(commits));
-        statisticsComponents.add(new BalanceAddDeleteComponent(commits));
-        statisticsComponents.add(new RevertPercentageComponent(commits));
+        statisticsComponents.add(new CommitPercentageComponent(authors));
+        statisticsComponents.add(new BalanceAddDeleteComponent(authors));
+        statisticsComponents.add(new RevertPercentageComponent(authors));
 
         statisticsComponents.forEach(IStatisticsComponent::createAndShowStatisticsView);
 
