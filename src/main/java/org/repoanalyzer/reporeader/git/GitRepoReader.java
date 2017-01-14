@@ -46,10 +46,11 @@ public class GitRepoReader extends AbstractRepoReader {
         Repository repo = this.buildRepository();
         Git git = new Git(repo);
 
-        for (RevCommit commit : this.getRevCommitsFromRepository(git)) this.size++;
+        final LinkedList<RevCommit> commits = this.getRevCommitsFromRepository(git);
+        this.size = commits.size();
 
         prepareAuthorProvider();
-        Callable<List<Commit>> task = () -> this.analyzeRepository(repo, this.getRevCommitsFromRepository(git));
+        Callable<List<Commit>> task = () -> this.analyzeRepository(repo, commits);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<List<Commit>> future = executor.submit(task);
@@ -58,13 +59,18 @@ public class GitRepoReader extends AbstractRepoReader {
         return future;
     }
 
-    private Iterable<RevCommit> getRevCommitsFromRepository(Git git) throws RepositoryNotFoundOrInvalidException {
-        Iterable<RevCommit> commits = null;
+    private LinkedList<RevCommit> getRevCommitsFromRepository(Git git) throws RepositoryNotFoundOrInvalidException {
+        Iterable<RevCommit> iterableCommits;
         try {
-            commits = git.log().call();
+            iterableCommits = git.log().call();
         } catch (GitAPIException exception) {
             throw new RepositoryNotFoundOrInvalidException();
         }
+
+        LinkedList<RevCommit> commits = new LinkedList<>();
+        for (RevCommit commit : iterableCommits)
+            commits.add(commit);
+
         return commits;
     }
 
@@ -73,7 +79,7 @@ public class GitRepoReader extends AbstractRepoReader {
         builder.setGitDir(new File(this.url))
                .readEnvironment()
                .findGitDir();
-        Repository repo = null;
+        Repository repo;
         try {
             repo = builder.build();
         } catch (IOException exception) {
@@ -82,7 +88,7 @@ public class GitRepoReader extends AbstractRepoReader {
         return repo;
     }
 
-    private List<Commit> analyzeRepository(Repository repo, final Iterable<RevCommit> commits)
+    private List<Commit> analyzeRepository(Repository repo, final LinkedList<RevCommit> commits)
             throws RepositoryNotFoundOrInvalidException {
         List<Commit> result = new LinkedList<>();
 
@@ -96,37 +102,16 @@ public class GitRepoReader extends AbstractRepoReader {
             int addedLinesNumber = 0;
             int deletedLinesNumber = 0;
             int changedLinesNumber = 0;
-            AbstractTreeIterator oldTreeIter;
-            AbstractTreeIterator newTreeIter;
 
             try {
-                newTreeIter = new CanonicalTreeParser(null, reader, commit.getTree());
-
-                int parents = commit.getParentCount();
-
-                if (parents < 1) oldTreeIter = new EmptyTreeIterator();
-                else if (parents == 1) oldTreeIter = new CanonicalTreeParser(null, reader, commit.getParent(0).getTree());
-                else continue;
-
-                for (DiffEntry entry : diffFormatter.scan(oldTreeIter, newTreeIter)) {
-                    for (Edit edit : diffFormatter.toFileHeader(entry).toEditList()) {
-                        switch (edit.getType()) {
-                            case INSERT:
-                                addedLinesNumber += edit.getLengthB();
-                                break;
-                            case DELETE:
-                                deletedLinesNumber += edit.getLengthA();
-                                break;
-                            case REPLACE:
-                                addedLinesNumber += edit.getLengthB();
-                                deletedLinesNumber += edit.getLengthA();
-                                changedLinesNumber += edit.getLengthA();
-                                break;
-                        }
-                    }
-                }
-            } catch (IOException exception) {
-                throw new RepositoryNotFoundOrInvalidException();
+                analyzeCommit(diffFormatter,
+                              reader,
+                              commit,
+                              addedLinesNumber,
+                              deletedLinesNumber,
+                              changedLinesNumber);
+            } catch (MergeCommitException e) {
+                continue;
             }
 
             CommitBuilder commitBuilder = new CommitBuilder(authorProvider);
@@ -148,5 +133,45 @@ public class GitRepoReader extends AbstractRepoReader {
         }
 
         return result;
+    }
+
+    private void analyzeCommit (DiffFormatter diffFormatter,
+                                ObjectReader reader,
+                                RevCommit commit,
+                                int addedLinesNumber,
+                                int deletedLinesNumber,
+                                int changedLinesNumber)
+            throws MergeCommitException, RepositoryNotFoundOrInvalidException {
+        try {
+            int parents = commit.getParentCount();
+            AbstractTreeIterator oldTreeIter;
+            AbstractTreeIterator newTreeIter = new CanonicalTreeParser(null, reader, commit.getTree());
+
+            if (parents < 1) oldTreeIter = new EmptyTreeIterator();
+            else if (parents == 1) oldTreeIter = new CanonicalTreeParser(null, reader, commit.getParent(0).getTree());
+            else throw new MergeCommitException();
+
+            for (DiffEntry entry : diffFormatter.scan(oldTreeIter, newTreeIter)) {
+                for (Edit edit : diffFormatter.toFileHeader(entry).toEditList()) {
+                    switch (edit.getType()) {
+                        case INSERT:
+                            addedLinesNumber += edit.getLengthB();
+                            break;
+                        case DELETE:
+                            deletedLinesNumber += edit.getLengthA();
+                            break;
+                        case REPLACE:
+                            addedLinesNumber += edit.getLengthB();
+                            deletedLinesNumber += edit.getLengthA();
+                            changedLinesNumber += edit.getLengthA();
+                            break;
+                        case EMPTY:
+                            break;
+                    }
+                }
+            }
+        } catch (IOException exception) {
+            throw new RepositoryNotFoundOrInvalidException();
+        }
     }
 }
