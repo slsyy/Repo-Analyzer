@@ -8,6 +8,7 @@ import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.AbstractTreeIterator;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
@@ -28,6 +29,8 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GitRepoReader extends AbstractRepoReader {
+    private Git git;
+
     public GitRepoReader(String url) {
         super(new File(url, ".git").toString());
     }
@@ -40,17 +43,13 @@ public class GitRepoReader extends AbstractRepoReader {
                                                     JsonParsingException,
                                                     CannotOpenAuthorFileException,
                                                     InvalidJsonDataFormatException {
-        this.progress = new AtomicInteger();
-        this.size = 0;
+        this.git = this.buildGitRepository();
 
-        Repository repo = this.buildRepository();
-        Git git = new Git(repo);
-
-        final LinkedList<RevCommit> commits = this.getRevCommitsFromRepository(git);
+        List<RevCommit> commits = this.getRevCommitsFromRepository();
         this.size = commits.size();
 
         prepareAuthorProvider();
-        Callable<List<Commit>> task = () -> this.analyzeRepository(repo, commits);
+        Callable<List<Commit>> task = () -> this.analyzeRepository(commits);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<List<Commit>> future = executor.submit(task);
@@ -59,10 +58,24 @@ public class GitRepoReader extends AbstractRepoReader {
         return future;
     }
 
-    private LinkedList<RevCommit> getRevCommitsFromRepository(Git git) throws RepositoryNotFoundOrInvalidException {
+    private Git buildGitRepository() throws RepositoryNotFoundOrInvalidException {
+        FileRepositoryBuilder builder = new FileRepositoryBuilder();
+        builder.setGitDir(new File(this.url))
+                .readEnvironment()
+                .findGitDir();
+        Repository repo;
+        try {
+            repo = builder.build();
+        } catch (IOException exception) {
+            throw new RepositoryNotFoundOrInvalidException();
+        }
+        return new Git(repo);
+    }
+
+    private List<RevCommit> getRevCommitsFromRepository() throws RepositoryNotFoundOrInvalidException {
         Iterable<RevCommit> iterableCommits;
         try {
-            iterableCommits = git.log().call();
+            iterableCommits = this.git.log().setRevFilter(RevFilter.NO_MERGES).call();
         } catch (GitAPIException exception) {
             throw new RepositoryNotFoundOrInvalidException();
         }
@@ -74,43 +87,26 @@ public class GitRepoReader extends AbstractRepoReader {
         return commits;
     }
 
-    private Repository buildRepository() throws RepositoryNotFoundOrInvalidException {
-        FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        builder.setGitDir(new File(this.url))
-               .readEnvironment()
-               .findGitDir();
-        Repository repo;
-        try {
-            repo = builder.build();
-        } catch (IOException exception) {
-            throw new RepositoryNotFoundOrInvalidException();
-        }
-        return repo;
-    }
-
-    private List<Commit> analyzeRepository(Repository repo, final LinkedList<RevCommit> commits)
+    private List<Commit> analyzeRepository(final List<RevCommit> commits)
             throws RepositoryNotFoundOrInvalidException {
-        List<Commit> result = new LinkedList<>();
+        Repository repo = this.git.getRepository();
 
         DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
         diffFormatter.setRepository(repo);
-
         ObjectReader reader = repo.newObjectReader();
+
+        List<Commit> result = new LinkedList<>();
 
         for (RevCommit commit : commits) {
             this.progress.incrementAndGet();
-            try {
-                result.add(this.analyzeCommit(diffFormatter, reader, commit));
-            } catch (MergeCommitException e) {
-                continue;
-            }
+            result.add(this.analyzeCommit(diffFormatter, reader, commit));
         }
 
         return result;
     }
 
     private Commit analyzeCommit (DiffFormatter diffFormatter, ObjectReader reader, RevCommit commit)
-            throws MergeCommitException, RepositoryNotFoundOrInvalidException {
+            throws RepositoryNotFoundOrInvalidException {
 
         int addedLinesNumber = 0;
         int deletedLinesNumber = 0;
@@ -122,8 +118,7 @@ public class GitRepoReader extends AbstractRepoReader {
             AbstractTreeIterator newTreeIter = new CanonicalTreeParser(null, reader, commit.getTree());
 
             if (parents < 1) oldTreeIter = new EmptyTreeIterator();
-            else if (parents == 1) oldTreeIter = new CanonicalTreeParser(null, reader, commit.getParent(0).getTree());
-            else throw new MergeCommitException();
+            else oldTreeIter = new CanonicalTreeParser(null, reader, commit.getParent(0).getTree());
 
             for (DiffEntry entry : diffFormatter.scan(oldTreeIter, newTreeIter)) {
                 for (Edit edit : diffFormatter.toFileHeader(entry).toEditList()) {
@@ -148,7 +143,7 @@ public class GitRepoReader extends AbstractRepoReader {
             throw new RepositoryNotFoundOrInvalidException();
         }
 
-        CommitBuilder commitBuilder = new CommitBuilder(authorProvider);
+        CommitBuilder commitBuilder = new CommitBuilder(this.authorProvider);
         Commit result = null;
 
         try {

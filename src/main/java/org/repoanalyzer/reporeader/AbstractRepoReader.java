@@ -21,6 +21,8 @@ public abstract class AbstractRepoReader implements IRepoReader {
     public AbstractRepoReader(String url, String authorFile) {
         this.url = url;
         this.authorFile = authorFile;
+        this.progress = new AtomicInteger();
+        this.size = 0;
     }
 
     public Progress getProgress() {
