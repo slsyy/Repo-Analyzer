@@ -99,49 +99,23 @@ public class GitRepoReader extends AbstractRepoReader {
 
         for (RevCommit commit : commits) {
             this.progress.incrementAndGet();
-            int addedLinesNumber = 0;
-            int deletedLinesNumber = 0;
-            int changedLinesNumber = 0;
-
             try {
-                analyzeCommit(diffFormatter,
-                              reader,
-                              commit,
-                              addedLinesNumber,
-                              deletedLinesNumber,
-                              changedLinesNumber);
+                result.add(this.analyzeCommit(diffFormatter, reader, commit));
             } catch (MergeCommitException e) {
                 continue;
-            }
-
-            CommitBuilder commitBuilder = new CommitBuilder(authorProvider);
-
-            try {
-                result.add(commitBuilder.setAuthorName(commit.getCommitterIdent().getName())
-                                        .setAuthorEmail(commit.getCommitterIdent().getEmailAddress())
-                                        .setHashCode(commit.getName())
-                                        .setDateTime(new DateTime(((long) commit.getCommitTime()) * 1000))
-                                        .setMessage(commit.getFullMessage())
-                                        .setAddedLinesNumber(addedLinesNumber)
-                                        .setDeletedLinesNumber(deletedLinesNumber)
-                                        .setChangedLinesNumber(changedLinesNumber)
-                                        .createCommit());
-            } catch (IncompleteCommitInfoException exception) {
-                System.out.print(exception.getMessage());
-                System.out.println(" - Skipping commit.");
             }
         }
 
         return result;
     }
 
-    private void analyzeCommit (DiffFormatter diffFormatter,
-                                ObjectReader reader,
-                                RevCommit commit,
-                                int addedLinesNumber,
-                                int deletedLinesNumber,
-                                int changedLinesNumber)
+    private Commit analyzeCommit (DiffFormatter diffFormatter, ObjectReader reader, RevCommit commit)
             throws MergeCommitException, RepositoryNotFoundOrInvalidException {
+
+        int addedLinesNumber = 0;
+        int deletedLinesNumber = 0;
+        int changedLinesNumber = 0;
+
         try {
             int parents = commit.getParentCount();
             AbstractTreeIterator oldTreeIter;
@@ -173,5 +147,25 @@ public class GitRepoReader extends AbstractRepoReader {
         } catch (IOException exception) {
             throw new RepositoryNotFoundOrInvalidException();
         }
+
+        CommitBuilder commitBuilder = new CommitBuilder(authorProvider);
+        Commit result = null;
+
+        try {
+            result = commitBuilder.setAuthorName(commit.getCommitterIdent().getName())
+                    .setAuthorEmail(commit.getCommitterIdent().getEmailAddress())
+                    .setHashCode(commit.getName())
+                    .setDateTime(new DateTime(((long) commit.getCommitTime()) * 1000))
+                    .setMessage(commit.getFullMessage())
+                    .setAddedLinesNumber(addedLinesNumber)
+                    .setDeletedLinesNumber(deletedLinesNumber)
+                    .setChangedLinesNumber(changedLinesNumber)
+                    .createCommit();
+        } catch (IncompleteCommitInfoException exception) {
+            System.out.print(exception.getMessage());
+            System.out.println(" - Skipping commit.");
+        }
+
+        return result;
     }
 }
