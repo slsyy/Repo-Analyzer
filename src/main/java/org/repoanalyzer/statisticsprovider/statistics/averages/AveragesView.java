@@ -7,8 +7,9 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Pagination;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -34,6 +35,8 @@ public class AveragesView {
                 new BarChart<>(xAxis,yAxis);
         xAxis.setLabel("Author");
         yAxis.setLabel("Value");
+
+        GridPane listGrid = new GridPane();
 
         dataList.sort(new Comparator<AveragesData>() {
             @Override
@@ -68,14 +71,41 @@ public class AveragesView {
                     i++;
                 }
                 bc.getData().addAll(addSerie,deleteSerie,changeSerie);
-                stage.setWidth(4000*bc.getData().size()/maxSeriesPrPage);
+                stage.setWidth(5000*bc.getData().size()/maxSeriesPrPage);
                 return new VBox();
             }
         });
 
+        Integer pages = 0;
+        Integer recordNumber = 0;
+        for(AveragesData data : dataList){
+            if(recordNumber == 0){
+                TextField page = new TextField("Page "+ (pages+1));
+                page.setStyle("-fx-text-fill: blue;");
+                listGrid.add(page,0,pages*maxSeriesPrPage + pages);
+            }
+            listGrid.add(new TextField(data.getAuthorName())
+                    , 0, pages*maxSeriesPrPage + pages + recordNumber + 1);
+            recordNumber++;
+            if(recordNumber.equals(maxSeriesPrPage)){
+                recordNumber = 0;
+                pages++;
+            }
+        }
+
         GridPane gp = new GridPane();
         gp.add(bc,0,0);
         gp.add(pagination,0,1);
+        ColumnConstraints cc = new ColumnConstraints();
+        cc.setHgrow(Priority.ALWAYS);
+        RowConstraints rc = new RowConstraints();
+        rc.setVgrow(Priority.ALWAYS);
+        gp.getColumnConstraints().add(cc);
+        gp.getRowConstraints().add(rc);
+
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setContent(listGrid);
+        gp.add(scrollPane, 1, 0);
 
         Scene scene = new Scene(gp, 700, 400, Color.WHITE);
         stage.setTitle("Averages of added, deleted and changed lines per commit");

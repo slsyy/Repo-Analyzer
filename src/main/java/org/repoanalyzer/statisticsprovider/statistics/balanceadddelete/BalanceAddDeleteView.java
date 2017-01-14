@@ -8,8 +8,9 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Pagination;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
 import javafx.stage.Stage;
@@ -38,6 +39,8 @@ public class BalanceAddDeleteView {
         xAxis.setLabel("Author");
         yAxis.setLabel("Value");
 
+        GridPane listGrid = new GridPane();
+
         dataList.sort(new Comparator<BalanceAddDeleteData>() {
             @Override
             public int compare(BalanceAddDeleteData o1, BalanceAddDeleteData o2) {
@@ -61,6 +64,8 @@ public class BalanceAddDeleteView {
                 addSerie.setName("Added lines");
                 XYChart.Series deleteSerie = new XYChart.Series();
                 deleteSerie.setName("Deleted lines");
+
+
                 int i = 0;
                 while(i<maxSeriesPrPage && dataList.size() > i+ param*maxSeriesPrPage) {
                     addSerie.getData().add(new XYChart.Data(dataList.get(param*maxSeriesPrPage + i).getAuthor().getFirstName(), dataList.get(param*maxSeriesPrPage + i).getAddedLines()));
@@ -68,16 +73,42 @@ public class BalanceAddDeleteView {
                     i++;
                 }
                 bc.getData().addAll(addSerie,deleteSerie);
-                stage.setWidth(4000*bc.getData().size()/maxSeriesPrPage);
+                stage.setWidth(7500*bc.getData().size()/maxSeriesPrPage);
                 return new VBox();
             }
         });
+        Integer pages = 0;
+        Integer recordNumber = 0;
+        for(BalanceAddDeleteData data : dataList){
+            if(recordNumber == 0){
+                TextField page = new TextField("Page "+ (pages+1));
+                page.setStyle("-fx-text-fill: blue;");
+                listGrid.add(page,0,pages*maxSeriesPrPage + pages);
+            }
+            listGrid.add(new TextField(data.getAuthor().getFirstName())
+                    , 0, pages*maxSeriesPrPage + pages + recordNumber + 1);
+            recordNumber++;
+            if(recordNumber.equals(maxSeriesPrPage)){
+                recordNumber = 0;
+                pages++;
+            }
+        }
 
         GridPane gp = new GridPane();
         gp.add(bc,0,0);
         gp.add(pagination,0,1);
+        ColumnConstraints cc = new ColumnConstraints();
+        cc.setHgrow(Priority.ALWAYS);
+        RowConstraints rc = new RowConstraints();
+        rc.setVgrow(Priority.ALWAYS);
+        gp.getColumnConstraints().add(cc);
+        gp.getRowConstraints().add(rc);
 
-        Scene scene = new Scene(gp, 700, 400, Color.WHITE);
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setContent(listGrid);
+        gp.add(scrollPane, 1, 0);
+
+        Scene scene = new Scene(gp, 800, 400, Color.WHITE);
         stage.setTitle("Added and deleted lines");
         stage.setScene(scene);
         stage.show();
