@@ -1,4 +1,4 @@
-package org.repoanalyzer.statisticsprovider.statistics.commitpercentage;
+package org.repoanalyzer.statisticsprovider.statistics;
 
 
 import org.junit.Before;
@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.repoanalyzer.reporeader.commit.Author;
 import org.repoanalyzer.reporeader.commit.Commit;
-import org.repoanalyzer.reporeader.commit.commitsgenerator.CommitsGenerator;
+import org.repoanalyzer.statisticsprovider.statistics.commitsgenerator.CommitsGenerator;
 import org.repoanalyzer.statisticsprovider.statistics.balanceadddelete.BalanceAddDeleteCalculator;
 import org.repoanalyzer.statisticsprovider.statistics.balanceadddelete.BalanceAddDeleteData;
 
@@ -23,8 +23,8 @@ public class BalanceAddDeleteCalculatorTest {
     private CommitsGenerator commitsGenerator;
     private String authorName;
     private String authorEmail;
-    private Integer exptectedAdded;
-    private Integer exptectedDeleted;
+    private Integer expectedAdded;
+    private Integer expectedDeleted;
     private int[] addedAndDeleted;
 
     @Parameterized.Parameters
@@ -36,12 +36,12 @@ public class BalanceAddDeleteCalculatorTest {
         });
     }
 
-    public BalanceAddDeleteCalculatorTest(String authorName, String authorEmail, int exptectedAdded, int exptectedDeleted,
+    public BalanceAddDeleteCalculatorTest(String authorName, String authorEmail, int expectedAdded, int expectedDeleted,
                                           int[] args){
         this.authorName = authorName;
         this.authorEmail = authorEmail;
-        this.exptectedAdded = exptectedAdded;
-        this.exptectedDeleted = exptectedDeleted;
+        this.expectedAdded = expectedAdded;
+        this.expectedDeleted = expectedDeleted;
         this.addedAndDeleted = args;
     }
 
@@ -77,8 +77,8 @@ public class BalanceAddDeleteCalculatorTest {
         BalanceAddDeleteCalculator balanceAddDeleteCalculator = new BalanceAddDeleteCalculator(authors);
         List<BalanceAddDeleteData> dataList = balanceAddDeleteCalculator.generateData();
 
-        assertEquals(exptectedAdded, findByAuthorName(dataList, authorName).getAddedLines());
-        assertEquals(exptectedDeleted, findByAuthorName(dataList, authorName).getDeletedLines());
+        assertEquals(expectedAdded, findByAuthorName(dataList, authorName).getAddedLines());
+        assertEquals(expectedDeleted, findByAuthorName(dataList, authorName).getDeletedLines());
     }
 
 

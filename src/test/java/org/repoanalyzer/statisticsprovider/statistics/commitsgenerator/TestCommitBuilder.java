@@ -1,4 +1,4 @@
-package org.repoanalyzer.reporeader.commit.commitsgenerator;
+package org.repoanalyzer.statisticsprovider.statistics.commitsgenerator;
 
 
 import org.joda.time.DateTime;

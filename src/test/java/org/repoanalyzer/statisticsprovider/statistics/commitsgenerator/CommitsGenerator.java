@@ -1,4 +1,4 @@
-package org.repoanalyzer.reporeader.commit.commitsgenerator;
+package org.repoanalyzer.statisticsprovider.statistics.commitsgenerator;
 
 import org.repoanalyzer.reporeader.commit.Author;
 import org.repoanalyzer.reporeader.commit.AuthorProvider;
@@ -6,7 +6,7 @@ import org.repoanalyzer.reporeader.commit.Commit;
 
 import java.util.*;
 
-public class CommitsGenerator implements ICommitsGenerator {
+public class CommitsGenerator{
     private AuthorProvider authorProvider;
     private Map<TestCommitBuilder, Integer>  testCommitBuilderToCommitsNumber;
 
@@ -25,7 +25,6 @@ public class CommitsGenerator implements ICommitsGenerator {
         return testCommitBuilder;
     }
 
-    @Override
     public List<Commit> getCommits() {
         List<Commit> result = new ArrayList<>();
         for(Map.Entry<TestCommitBuilder, Integer> entry: testCommitBuilderToCommitsNumber.entrySet()) {

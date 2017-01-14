@@ -1,4 +1,4 @@
-package org.repoanalyzer.statisticsprovider.statistics.commitpercentage;
+package org.repoanalyzer.statisticsprovider.statistics;
 
 
 import org.junit.Before;
@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.repoanalyzer.reporeader.commit.Author;
 import org.repoanalyzer.reporeader.commit.Commit;
-import org.repoanalyzer.reporeader.commit.commitsgenerator.CommitsGenerator;
+import org.repoanalyzer.statisticsprovider.statistics.commitsgenerator.CommitsGenerator;
 import org.repoanalyzer.statisticsprovider.statistics.revertpercentage.RevertPercentageCalculator;
 import org.repoanalyzer.statisticsprovider.statistics.revertpercentage.RevertPercentageData;
 

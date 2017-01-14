@@ -33,8 +33,6 @@ import java.util.concurrent.Future;
 public class StatisticsController extends Application {
     public static final int REPO_READER_UPDATE_DURATION = 1;
     private IRepoReader repoReader;
-    //private List<IStatisticsComponent> statisticsComponents;
-    //private IStatisticsComponent currentStatisticsComponent;
 
     public void startApplication(){
         launch();

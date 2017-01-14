@@ -1,10 +1,11 @@
-package org.repoanalyzer.statisticsprovider.statistics.commitpercentage;
+package org.repoanalyzer.statisticsprovider.statistics;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.repoanalyzer.reporeader.commit.Author;
-import org.repoanalyzer.reporeader.commit.Commit;
-import org.repoanalyzer.reporeader.commit.commitsgenerator.CommitsGenerator;
+import org.repoanalyzer.statisticsprovider.statistics.commitsgenerator.CommitsGenerator;
+import org.repoanalyzer.statisticsprovider.statistics.commitpercentage.CommitPercentageCalculator;
+import org.repoanalyzer.statisticsprovider.statistics.commitpercentage.CommitPercentageData;
 
 import java.util.HashSet;
 import java.util.List;
@@ -30,7 +31,6 @@ public class CommitPercentageCalculatorTest {
     private static final int THIRD_AUTHOR_COMMITS_NUMBER = 5000;
 
     private CommitsGenerator commitsGenerator;
-    private CommitPercentageCalculator commitPercentageCalculator;
 
     @Before
     public void setUp() throws Exception {
