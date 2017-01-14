@@ -82,11 +82,13 @@ public class BalanceAddDeleteView {
         for(BalanceAddDeleteData data : dataList){
             if(recordNumber == 0){
                 TextField page = new TextField("Page "+ (pages+1));
+                page.setEditable(false);
                 page.setStyle("-fx-text-fill: blue;");
                 listGrid.add(page,0,pages*maxSeriesPrPage + pages);
             }
-            listGrid.add(new TextField(data.getAuthor().getFirstName())
-                    , 0, pages*maxSeriesPrPage + pages + recordNumber + 1);
+            TextField name = new TextField(data.getAuthor().getFirstName());
+            name.setEditable(false);
+            listGrid.add(name, 0, pages*maxSeriesPrPage + pages + recordNumber + 1);
             recordNumber++;
             if(recordNumber.equals(maxSeriesPrPage)){
                 recordNumber = 0;

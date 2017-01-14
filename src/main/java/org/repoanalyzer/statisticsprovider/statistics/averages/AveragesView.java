@@ -82,10 +82,12 @@ public class AveragesView {
             if(recordNumber == 0){
                 TextField page = new TextField("Page "+ (pages+1));
                 page.setStyle("-fx-text-fill: blue;");
+                page.setEditable(false);
                 listGrid.add(page,0,pages*maxSeriesPrPage + pages);
             }
-            listGrid.add(new TextField(data.getAuthorName())
-                    , 0, pages*maxSeriesPrPage + pages + recordNumber + 1);
+            TextField name = new TextField(data.getAuthorName());
+            name.setEditable(false);
+            listGrid.add(name, 0, pages*maxSeriesPrPage + pages + recordNumber + 1);
             recordNumber++;
             if(recordNumber.equals(maxSeriesPrPage)){
                 recordNumber = 0;
