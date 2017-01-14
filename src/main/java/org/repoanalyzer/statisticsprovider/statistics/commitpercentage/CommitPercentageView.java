@@ -81,7 +81,7 @@ public class CommitPercentageView {
         scrollPane.setContent(checkBoxesPane);
         gridPane.add(scrollPane, 1, 0);
 
-        Scene scene = new Scene(gridPane,500,500, Color.WHITE);
+        Scene scene = new Scene(gridPane,700,500, Color.WHITE);
         stage.setTitle("Commits statistic");
         stage.setScene(scene);
         stage.show();

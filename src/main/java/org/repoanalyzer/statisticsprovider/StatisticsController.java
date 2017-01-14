@@ -14,6 +14,7 @@ import org.repoanalyzer.reporeader.exceptions.JsonParsingException;
 import org.repoanalyzer.reporeader.exceptions.RepositoryNotFoundOrInvalidException;
 import org.repoanalyzer.reporeader.commit.Commit;
 import org.repoanalyzer.statisticsprovider.statistics.*;
+import org.repoanalyzer.statisticsprovider.statistics.averages.AveragesComponent;
 import org.repoanalyzer.statisticsprovider.statistics.balanceadddelete.BalanceAddDeleteComponent;
 import org.repoanalyzer.statisticsprovider.statistics.commitpercentage.CommitPercentageComponent;
 import org.repoanalyzer.statisticsprovider.statistics.commitsperhour.CommitsPerHourComponent;
@@ -106,6 +107,7 @@ public class StatisticsController extends Application {
         statisticsComponents.add(new CommitPercentageComponent(authors));
         statisticsComponents.add(new BalanceAddDeleteComponent(authors));
         statisticsComponents.add(new RevertPercentageComponent(authors));
+        statisticsComponents.add(new AveragesComponent(authors));
 
         statisticsComponents.forEach(IStatisticsComponent::createAndShowStatisticsView);
 
