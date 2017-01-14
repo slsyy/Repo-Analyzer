@@ -2,6 +2,7 @@ package org.repoanalyzer.reporeader.commit;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Author {
     private LinkedList<String> names;
@@ -49,6 +50,10 @@ public class Author {
 
     public void addCommit(Commit commit) {
         commits.add(commit);
+    }
+
+    public void addCommits(List<Commit> commits){
+        this.commits.addAll(commits.stream().collect(Collectors.toList()));
     }
 
     public LinkedList<Commit> getCommits() { return commits; }
