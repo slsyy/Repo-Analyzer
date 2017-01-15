@@ -12,7 +12,7 @@ public class FilePreloadedAuthorProviderTest {
     public void addAuthorsFromFileTest() throws Exception {
         //given
         String testFilePath = System.getProperty("user.dir")
-                + "\\src\\test\\java\\org\\repoanalyzer\\reporeader\\commit\\TestAuthors.json";
+                + "/src/test/java/org/repoanalyzer/reporeader/commit/TestAuthors.json";
         String author1 = "[name2]:[mail3]";
         String author2 = "[name1]:[mail1, mail2]";
 
