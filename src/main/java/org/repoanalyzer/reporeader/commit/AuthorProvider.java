@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class AuthorProvider {
-    protected Set<Author> authors;
+    protected HashSet<Author> authors;
 
     public AuthorProvider(){
         this.authors = new HashSet<>();
@@ -57,7 +57,7 @@ public class AuthorProvider {
 
     private Author findByName(String name) throws AuthorNotFoundException{
         for (Author a : this.authors)
-            if (a.containsEmail(name))
+            if (a.containsName(name))
                 return a;
         throw new AuthorNotFoundException();
     }
