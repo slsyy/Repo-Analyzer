@@ -59,15 +59,15 @@ public class CommitBuilder {
     }
 
     public Commit createCommit() throws IncompleteCommitInfoException{
-        if (authorName.isEmpty()) throw new IncompleteCommitInfoException("Missing author name.");
-        if (authorEmail.isEmpty()) throw new IncompleteCommitInfoException("Missing author email.");
+        if (this.authorName.isEmpty()) throw new IncompleteCommitInfoException("Missing author name.");
+        if (this.authorEmail.isEmpty()) throw new IncompleteCommitInfoException("Missing author email.");
 
-        Author author = authorProvider.getCreateOrUpdateAuthor(authorName, authorEmail);
+        Author author = this.authorProvider.getCreateOrUpdateAuthor(this.authorName, this.authorEmail);
 
-        if (hashCode.isEmpty()) throw new IncompleteCommitInfoException("Missing commit hashCode.");
-        if (dateTime.isEqual(new DateTime(0))) throw new IncompleteCommitInfoException("Missing commit date.");
+        if (this.hashCode.isEmpty()) throw new IncompleteCommitInfoException("Missing commit hashCode.");
+        if (this.dateTime.isEqual(new DateTime(0))) throw new IncompleteCommitInfoException("Missing commit date.");
 
-        Commit commit = new Commit(hashCode, author, dateTime, message, deletedLinesNumber, addedLinesNumber, changedLinesNumber);
+        Commit commit = new Commit(this.hashCode, author, this.dateTime, this.message, this.deletedLinesNumber, this.addedLinesNumber, this.changedLinesNumber);
         author.addCommit(commit);
         return commit;
     }

@@ -23,43 +23,43 @@ final public class Commit {
     }
 
     public String getHashCode() {
-        return hashCode;
+        return this.hashCode;
     }
 
     public Author getAuthor() {
-        return author;
+        return this.author;
     }
 
     public DateTime getDateTime() {
-        return dateTime;
+        return this.dateTime;
     }
 
     public String getMessage() {
-        return message;
+        return this.message;
     }
 
     public int getDeletedLinesNumber() {
-        return deletedLinesNumber;
+        return this.deletedLinesNumber;
     }
 
     public int getAddedLinesNumber() {
-        return addedLinesNumber;
+        return this.addedLinesNumber;
     }
 
     public int getChangedLinesNumber() {
-        return changedLinesNumber;
+        return this.changedLinesNumber;
     }
 
     @Override
     public String toString() {
         return "Commit{" +
-                "hashCode='" + hashCode + '\'' +
-                ", author=" + author.getFirstName() +
-                ", dateTime=" + dateTime +
-                ", message='" + message + '\'' +
-                ", deletedLinesNumber=" + deletedLinesNumber +
-                ", addedLinesNumber=" + addedLinesNumber +
-                ", changedLinesNumber=" + changedLinesNumber +
+                "hashCode='" + this.hashCode + '\'' +
+                ", author=" + this.author.getFirstName() +
+                ", dateTime=" + this.dateTime +
+                ", message='" + this.message + '\'' +
+                ", deletedLinesNumber=" + this.deletedLinesNumber +
+                ", addedLinesNumber=" + this.addedLinesNumber +
+                ", changedLinesNumber=" + this.changedLinesNumber +
                 '}';
     }
 }

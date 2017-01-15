@@ -1,10 +1,10 @@
 package org.repoanalyzer.reporeader;
 
-import com.google.common.collect.ImmutableSet;
 import org.repoanalyzer.reporeader.commit.Author;
 import org.repoanalyzer.reporeader.commit.AuthorProvider;
 import org.repoanalyzer.reporeader.commit.FilePreloadedAuthorProvider;
 
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class AbstractRepoReader implements IRepoReader {
@@ -30,8 +30,8 @@ public abstract class AbstractRepoReader implements IRepoReader {
         return progress;
     }
 
-    public ImmutableSet<Author> getAuthors() {
-        return this.authorProvider.getImmutableAuthorsSet();
+    public Set<Author> getAuthors() {
+        return this.authorProvider.getAuthors();
     }
 
     protected void prepareAuthorProvider() {

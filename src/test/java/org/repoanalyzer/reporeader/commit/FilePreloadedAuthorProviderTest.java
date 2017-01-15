@@ -24,7 +24,7 @@ public class FilePreloadedAuthorProviderTest {
         }
 
         //then
-        assertEquals(authorProvider.getAuthorsSize(),2);
+        assertEquals(authorProvider.getAuthorsNumber(),2);
         assertTrue(authorProvider.doesSetAsStringContainsAuthor(author1));
         assertTrue(authorProvider.doesSetAsStringContainsAuthor(author2));
     }

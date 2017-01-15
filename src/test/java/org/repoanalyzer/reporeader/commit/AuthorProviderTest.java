@@ -25,10 +25,10 @@ public class AuthorProviderTest {
         author = authorProvider.getCreateOrUpdateAuthor(name, mail);
 
         //then
-        assertEquals(author.getNames().size(), 1);
-        assertTrue(author.getNames().contains(name));
-        assertEquals(author.getEmails().size(), 1);
-        assertTrue(author.getEmails().contains(mail));
+        assertEquals(author.getNamesNumber(), 1);
+        assertTrue(author.containsName(name));
+        assertEquals(author.getEmailsNumber(), 1);
+        assertTrue(author.containsEmail(mail));
     }
 
     @Test
@@ -43,11 +43,11 @@ public class AuthorProviderTest {
         author = authorProvider.getCreateOrUpdateAuthor(name, mail2);
 
         //then
-        assertEquals(author.getNames().size(), 1);
-        assertTrue(author.getNames().contains(name));
-        assertEquals(author.getEmails().size(), 2);
-        assertTrue(author.getEmails().contains(mail1));
-        assertTrue(author.getEmails().contains(mail2));
+        assertEquals(author.getNamesNumber(), 1);
+        assertTrue(author.containsName(name));
+        assertEquals(author.getEmailsNumber(), 2);
+        assertTrue(author.containsEmail(mail1));
+        assertTrue(author.containsEmail(mail2));
     }
 
     @Test
@@ -62,10 +62,10 @@ public class AuthorProviderTest {
         author = authorProvider.getCreateOrUpdateAuthor(name2, mail);
 
         //then
-        assertEquals(author.getNames().size(), 2);
-        assertTrue(author.getNames().contains(name1));
-        assertTrue(author.getNames().contains(name2));
-        assertEquals(author.getEmails().size(), 1);
-        assertTrue(author.getEmails().contains(mail));
+        assertEquals(author.getNamesNumber(), 2);
+        assertTrue(author.containsName(name1));
+        assertTrue(author.containsName(name2));
+        assertEquals(author.getEmailsNumber(), 1);
+        assertTrue(author.containsEmail(mail));
     }
 }

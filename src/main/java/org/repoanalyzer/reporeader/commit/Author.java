@@ -1,13 +1,14 @@
 package org.repoanalyzer.reporeader.commit;
 
+import com.google.common.collect.ImmutableList;
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Author {
-    private LinkedList<String> names;
-    private LinkedList<String> emails;
-    private LinkedList<Commit> commits;
+    private List<String> names;
+    private List<String> emails;
+    private List<Commit> commits;
 
     public Author(String name) {
         this.names = new LinkedList<>();
@@ -18,48 +19,54 @@ public class Author {
     }
 
     public Author(String name, String email) {
-        this.names = new LinkedList<>();
-        this.emails = new LinkedList<>();
-        this.commits = new LinkedList<>();
-
-        this.names.add(name);
+        this(name);
         this.emails.add(email);
     }
 
-    public List<String> getNames() {
-        return names;
+    public int getNamesNumber() {
+        return this.names.size();
+    }
+
+    public boolean containsName(String name) {
+        return this.names.contains(name);
     }
 
     public String getFirstName() {
-        return names.getFirst();
+        return this.names.get(0);
     }
 
-    public List<String> getEmails() {
-        return emails;
+    public int getEmailsNumber() {
+        return this.emails.size();
+    }
+
+    public boolean containsEmail(String email) {
+        return this.emails.contains(email);
     }
 
     public void addNameIfNotExists(String name) {
-        if (!names.contains(name))
-            names.add(name);
+        if (!this.names.contains(name))
+            this.names.add(name);
     }
 
     public void addEmailIfNotExists(String email) {
-        if (!emails.contains(email))
-            emails.add(email);
+        if (!this.emails.contains(email))
+            this.emails.add(email);
     }
 
     public void addCommit(Commit commit) {
-        commits.add(commit);
+        this.commits.add(commit);
     }
 
     public void addCommits(List<Commit> commits){
-        this.commits.addAll(commits.stream().collect(Collectors.toList()));
+        this.commits.addAll(commits);
     }
 
-    public LinkedList<Commit> getCommits() { return commits; }
+    public List<Commit> getCommits() {
+        return ImmutableList.copyOf(this.commits);
+    }
 
     @Override
     public String toString(){
-        return names.toString() + ":" + emails.toString();
+        return this.names.toString() + ":" + this.emails.toString();
     }
 }
