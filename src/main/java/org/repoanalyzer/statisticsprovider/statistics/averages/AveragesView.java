@@ -50,7 +50,8 @@ public class AveragesView {
             }
         });
 
-        Pagination pagination = new Pagination(dataList.size()/maxSeriesPrPage + 1);
+        Pagination pagination = new Pagination(dataList.size()%maxSeriesPrPage == 0 ?
+                                dataList.size()/maxSeriesPrPage : dataList.size()/maxSeriesPrPage + 1);
         pagination.setPageFactory(new Callback<Integer, Node>() {
             @Override
             public Node call(Integer param) {
@@ -71,7 +72,9 @@ public class AveragesView {
                     i++;
                 }
                 bc.getData().addAll(addSerie,deleteSerie,changeSerie);
-                stage.setWidth(5000*bc.getData().size()/maxSeriesPrPage);
+//                if(i<maxSeriesPrPage-1) {
+//                    stage.setWidth(5000 * bc.getData().size() / maxSeriesPrPage);
+//                }
                 return new VBox();
             }
         });

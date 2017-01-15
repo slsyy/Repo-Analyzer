@@ -73,7 +73,7 @@ public class BalanceAddDeleteView {
                     i++;
                 }
                 bc.getData().addAll(addSerie,deleteSerie);
-                stage.setWidth(7500*bc.getData().size()/maxSeriesPrPage);
+//                stage.setWidth(7500*bc.getData().size()/maxSeriesPrPage);
                 return new VBox();
             }
         });
