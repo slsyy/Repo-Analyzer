@@ -6,9 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Author {
-    private List<String> names;
-    private List<String> emails;
-    private List<Commit> commits;
+    final private List<String> names;
+    final private List<String> emails;
+    final private List<Commit> commits;
 
     public Author(String name) {
         this.names = new LinkedList<>();
