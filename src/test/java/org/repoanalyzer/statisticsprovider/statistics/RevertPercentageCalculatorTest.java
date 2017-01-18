@@ -19,12 +19,12 @@ import static org.junit.Assert.assertEquals;
 public class RevertPercentageCalculatorTest {
 
     private static final double DELTA = 0.01;
-    private CommitsGenerator commitsGenerator;
     private String authorName;
     private String authorEmail;
     private int revertsNumber;
     private int commitsNumber;
     private double exptected;
+    private Set<Author> authors;
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
@@ -47,7 +47,21 @@ public class RevertPercentageCalculatorTest {
 
     @Before
     public void setUp() throws Exception {
-        commitsGenerator = new CommitsGenerator();
+        CommitsGenerator commitsGenerator = new CommitsGenerator();
+
+        commitsGenerator.createNewTestCommit(commitsNumber)
+                .setAuthorName(authorName)
+                .setAuthorEmail(authorEmail);
+        commitsGenerator.createNewTestCommit(revertsNumber)
+                .setMessage("Revert message")
+                .setAuthorName(authorName)
+                .setAuthorEmail(authorEmail);
+
+        List<Commit> commits = commitsGenerator.getCommits();
+        authors = new HashSet<>();
+        Author author = new Author(authorName, authorEmail);
+        author.addCommits(commits);
+        authors.add(author);
     }
 
     private static RevertPercentageData findByAuthorName(List<RevertPercentageData> dataList, String authorName) {
@@ -58,20 +72,8 @@ public class RevertPercentageCalculatorTest {
     }
 
     @Test
-    public void generateData() throws Exception {
-        commitsGenerator.createNewTestCommit(commitsNumber)
-                .setAuthorName(authorName)
-                .setAuthorEmail(authorEmail);
-        commitsGenerator.createNewTestCommit(revertsNumber)
-                .setMessage("Revert message")
-                .setAuthorName(authorName)
-                .setAuthorEmail(authorEmail);
+    public void generateDataRevertPercentageCalculator() throws Exception {
 
-        List<Commit> commits = commitsGenerator.getCommits();
-        Set<Author> authors = new HashSet<>();
-        Author author = new Author(authorName, authorEmail);
-        author.addCommits(commits);
-        authors.add(author);
         RevertPercentageCalculator revertPercentageCalculator = new RevertPercentageCalculator(authors);
         List<RevertPercentageData> dataList = revertPercentageCalculator.generateStatistics();
 

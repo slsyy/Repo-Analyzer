@@ -20,7 +20,7 @@ public class RevertPercentageCalculator {
         List<RevertPercentageData> result = new ArrayList<>();
         for(Author author : authors){
             RevertPercentageData data = new RevertPercentageData(author);
-            Integer reverts = 0;
+            int reverts = 0;
             for(Commit c : author.getCommits()){
                 String[] words = c.getMessage().split(" ");
                 if(words[0].equals("Revert"))

@@ -88,8 +88,7 @@ public class StatisticsController extends Application {
 
         repoReaderProgressBarView.getDialogStage().show();
 
-        Thread thread = new Thread(task);
-        thread.start();
+        new Thread(task).start();
     }
 
     private void createStatisticsComponents(Task<List<Commit>> task) {

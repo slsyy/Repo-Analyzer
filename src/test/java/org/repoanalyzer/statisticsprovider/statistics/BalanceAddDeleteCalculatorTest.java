@@ -20,12 +20,12 @@ import static org.junit.Assert.assertEquals;
 
 public class BalanceAddDeleteCalculatorTest {
 
-    private CommitsGenerator commitsGenerator;
     private String authorName;
     private String authorEmail;
     private Integer expectedAdded;
     private Integer expectedDeleted;
     private int[] addedAndDeleted;
+    private Set<Author> authors;
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
@@ -47,7 +47,21 @@ public class BalanceAddDeleteCalculatorTest {
 
     @Before
     public void setUp() throws Exception {
-        commitsGenerator = new CommitsGenerator();
+        CommitsGenerator commitsGenerator = new CommitsGenerator();
+
+        for(int i = 0; i < addedAndDeleted.length; i += 2){
+            commitsGenerator.createNewTestCommit()
+                    .setAuthorName(authorName)
+                    .setAuthorEmail(authorEmail)
+                    .setAddedLinesNumber(addedAndDeleted[i])
+                    .setDeletedLinesNumber(addedAndDeleted[i+1]);
+        }
+
+        List<Commit> commits = commitsGenerator.getCommits();
+        authors = new HashSet<>();
+        Author author = new Author(authorName, authorEmail);
+        author.addCommits(commits);
+        authors.add(author);
     }
 
     private static BalanceAddDeleteData findByAuthorName(List<BalanceAddDeleteData> dataList, String authorName) {
@@ -58,21 +72,7 @@ public class BalanceAddDeleteCalculatorTest {
     }
 
     @Test
-    public void generateData() throws Exception {
-        for(int i = 0; i < addedAndDeleted.length; i += 2){
-            commitsGenerator.createNewTestCommit()
-                    .setAuthorName(authorName)
-                    .setAuthorEmail(authorEmail)
-                    .setAddedLinesNumber(addedAndDeleted[i])
-                    .setDeletedLinesNumber(addedAndDeleted[i+1]);
-        }
-
-
-        List<Commit> commits = commitsGenerator.getCommits();
-        Set<Author> authors = new HashSet<>();
-        Author author = new Author(authorName, authorEmail);
-        author.addCommits(commits);
-        authors.add(author);
+    public void generateDataAddDeleteCalculator() throws Exception {
 
         BalanceAddDeleteCalculator balanceAddDeleteCalculator = new BalanceAddDeleteCalculator(authors);
         List<BalanceAddDeleteData> dataList = balanceAddDeleteCalculator.generateData();

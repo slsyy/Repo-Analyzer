@@ -30,23 +30,14 @@ public class CommitPercentageCalculatorTest {
     private static final String THIRD_AUTHOR_EMAIL = "third";
     private static final int THIRD_AUTHOR_COMMITS_NUMBER = 5000;
 
-    private CommitsGenerator commitsGenerator;
+
+    private Set<Author> authors;
 
     @Before
     public void setUp() throws Exception {
-        commitsGenerator = new CommitsGenerator();
-    }
+        CommitsGenerator commitsGenerator = new CommitsGenerator();
 
-    private static CommitPercentageData findByAuthorName(List<CommitPercentageData> dataList, String authorName) {
-        return dataList.stream()
-                .filter(c -> c.getAuthorName().equals(authorName))
-                .findFirst()
-                .orElse(null);
-    }
-
-    @Test
-    public void generateData() throws Exception {
-        Set<Author> authors = new HashSet<>();
+        authors = new HashSet<>();
         commitsGenerator.createNewTestCommit(FIRST_AUTHOR_COMMITS_NUMBER)
                 .setAuthorName(FIRST_AUTHOR_NAME)
                 .setAuthorEmail(FIRST_AUTHOR_EMAIL);
@@ -67,8 +58,17 @@ public class CommitPercentageCalculatorTest {
         Author third = new Author(THIRD_AUTHOR_NAME, THIRD_AUTHOR_EMAIL);
         third.addCommits(commitsGenerator.getCommits(third));
         authors.add(third);
+    }
 
+    private static CommitPercentageData findByAuthorName(List<CommitPercentageData> dataList, String authorName) {
+        return dataList.stream()
+                .filter(c -> c.getAuthorName().equals(authorName))
+                .findFirst()
+                .orElse(null);
+    }
 
+    @Test
+    public void generateDataCommitPercentageCalculator() throws Exception {
         CommitPercentageCalculator commitPercentageCalculator = new CommitPercentageCalculator(authors);
         List<CommitPercentageData> dataList = commitPercentageCalculator.generateData();
 
