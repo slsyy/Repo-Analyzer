@@ -36,8 +36,11 @@ public class AuthorProvider {
         return this.authors.size();
     }
 
-    public boolean doesSetAsStringContainsAuthor(String author) {
-        return this.authors.toString().contains(author);
+    public boolean containsAuthor(Author author){
+        for(Author i: this.authors)
+            if(author.equals(i))
+                return true;
+        return false;
     }
 
     private Author getByEmailOrName(String name, String email) throws AuthorNotFoundException {

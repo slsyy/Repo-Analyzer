@@ -19,17 +19,17 @@ public class CommitTest {
     @Test
     public void creationTest() throws Exception {
         // given
-        String hash = "hash";
+        String sha = "sha";
         String message = "message";
         int deletedLinesNumber = 3;
         int addedLinesNumber = 2;
         int changedLinesNumber = 1;
 
         // when
-        Commit commit = new Commit(hash, author, date, message, deletedLinesNumber, addedLinesNumber, changedLinesNumber);
+        Commit commit = new Commit(sha, author, date, message, deletedLinesNumber, addedLinesNumber, changedLinesNumber);
 
         // then
-        assertEquals(commit.getHashCode(), hash);
+        assertEquals(commit.getSHA(), sha);
         assertEquals(commit.getAuthor(), author);
         assertEquals(commit.getDateTime(), date);
         assertEquals(commit.getMessage(), message);

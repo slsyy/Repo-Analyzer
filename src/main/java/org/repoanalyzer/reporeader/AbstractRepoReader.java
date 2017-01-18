@@ -26,8 +26,7 @@ public abstract class AbstractRepoReader implements IRepoReader {
     }
 
     public Progress getProgress() {
-        Progress progress = new Progress(this.progress.get(), this.size);
-        return progress;
+        return new Progress(this.progress.get(), this.size);
     }
 
     public Set<Author> getAuthors() {

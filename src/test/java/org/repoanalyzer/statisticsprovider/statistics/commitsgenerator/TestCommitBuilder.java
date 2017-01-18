@@ -13,7 +13,7 @@ public class TestCommitBuilder {
 
     private  String authorName = "DefaultAuthor";
     private  String authorEmail = "aa@bb.cc";
-    private  String hashCode = "123";
+    private  String sha = "123";
     private  DateTime dateTime = new DateTime(1);
     private  String message = "ExampleMessage";
     private int deletedLinesNumber;
@@ -34,8 +34,8 @@ public class TestCommitBuilder {
         return this;
     }
 
-    public TestCommitBuilder setHashCode(String hashCode) {
-        this.hashCode = hashCode;
+    public TestCommitBuilder setSHA(String hashCode) {
+        this.sha = sha;
         return this;
     }
 
@@ -70,7 +70,7 @@ public class TestCommitBuilder {
         try {
             return commitBuilder.setAuthorName(authorName)
                                 .setAuthorEmail(authorEmail)
-                                .setHashCode(hashCode)
+                                .setSHA(sha)
                                 .setDateTime(dateTime)
                                 .setMessage(message)
                                 .setChangedLinesNumber(changedLinesNumber)

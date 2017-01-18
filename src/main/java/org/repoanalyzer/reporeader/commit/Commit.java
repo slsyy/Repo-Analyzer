@@ -4,7 +4,7 @@ import org.joda.time.DateTime;
 
 final public class Commit {
 
-    private final String hashCode;
+    private final String sha;
     private final Author author;
     private final DateTime dateTime;
     private final String message;
@@ -12,8 +12,8 @@ final public class Commit {
     private final int addedLinesNumber;
     private final int changedLinesNumber;
 
-    Commit(String hashCode, Author author, DateTime dateTime, String message, int deletedLinesNumber, int addedLinesNumber, int changedLinesNumber) {
-        this.hashCode = hashCode;
+    Commit(String sha, Author author, DateTime dateTime, String message, int deletedLinesNumber, int addedLinesNumber, int changedLinesNumber) {
+        this.sha = sha;
         this.author = author;
         this.dateTime = dateTime;
         this.message = message;
@@ -22,8 +22,8 @@ final public class Commit {
         this.changedLinesNumber = changedLinesNumber;
     }
 
-    public String getHashCode() {
-        return this.hashCode;
+    public String getSHA() {
+        return this.sha;
     }
 
     public Author getAuthor() {
@@ -53,7 +53,7 @@ final public class Commit {
     @Override
     public String toString() {
         return "Commit{" +
-                "hashCode='" + this.hashCode + '\'' +
+                "hashCode='" + this.sha + '\'' +
                 ", author=" + this.author.getFirstName() +
                 ", dateTime=" + this.dateTime +
                 ", message='" + this.message + '\'' +

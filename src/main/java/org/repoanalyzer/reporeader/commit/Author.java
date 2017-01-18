@@ -66,6 +66,16 @@ public class Author {
     }
 
     @Override
+    public boolean equals(Object other) {
+        boolean result = false;
+        if (other instanceof Author) {
+            Author that = (Author) other;
+            result = (this.names.equals(that.names) && this.emails.equals(that.emails));
+        }
+        return result;
+    }
+
+    @Override
     public String toString(){
         return this.names.toString() + ":" + this.emails.toString();
     }

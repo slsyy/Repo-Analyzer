@@ -7,7 +7,7 @@ public class CommitBuilder {
     private final AuthorProvider authorProvider;
     private String authorName;
     private String authorEmail;
-    private String hashCode;
+    private String sha;
     private String message;
     private DateTime dateTime;
     private int deletedLinesNumber;
@@ -28,8 +28,8 @@ public class CommitBuilder {
         return this;
     }
 
-    public CommitBuilder setHashCode(String hashCode) {
-        this.hashCode = hashCode;
+    public CommitBuilder setSHA(String sha) {
+        this.sha = sha;
         return this;
     }
 
@@ -64,10 +64,10 @@ public class CommitBuilder {
 
         Author author = this.authorProvider.getCreateOrUpdateAuthor(this.authorName, this.authorEmail);
 
-        if (this.hashCode.isEmpty()) throw new IncompleteCommitInfoException("Missing commit hashCode.");
+        if (this.sha.isEmpty()) throw new IncompleteCommitInfoException("Missing commit hashCode.");
         if (this.dateTime.isEqual(new DateTime(0))) throw new IncompleteCommitInfoException("Missing commit date.");
 
-        Commit commit = new Commit(this.hashCode, author, this.dateTime, this.message, this.deletedLinesNumber, this.addedLinesNumber, this.changedLinesNumber);
+        Commit commit = new Commit(this.sha, author, this.dateTime, this.message, this.deletedLinesNumber, this.addedLinesNumber, this.changedLinesNumber);
         author.addCommit(commit);
         return commit;
     }

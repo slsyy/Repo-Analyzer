@@ -149,7 +149,7 @@ public class GitRepoReader extends AbstractRepoReader {
         try {
             result = commitBuilder.setAuthorName(commit.getCommitterIdent().getName())
                     .setAuthorEmail(commit.getCommitterIdent().getEmailAddress())
-                    .setHashCode(commit.getName())
+                    .setSHA(commit.getName())
                     .setDateTime(new DateTime(((long) commit.getCommitTime()) * 1000))
                     .setMessage(commit.getFullMessage())
                     .setAddedLinesNumber(addedLinesNumber)
