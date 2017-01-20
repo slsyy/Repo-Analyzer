@@ -2,7 +2,7 @@ package org.repoanalyzer.statisticsprovider.statistics;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.repoanalyzer.reporeader.commit.Author;
+import org.repoanalyzer.reporeader.author.Author;
 import org.repoanalyzer.statisticsprovider.statistics.commitsgenerator.CommitsGenerator;
 import org.repoanalyzer.statisticsprovider.statistics.commitpercentage.CommitPercentageCalculator;
 import org.repoanalyzer.statisticsprovider.statistics.commitpercentage.CommitPercentageData;

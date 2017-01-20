@@ -1,11 +1,12 @@
-package org.repoanalyzer.reporeader.commit;
+package org.repoanalyzer.reporeader.author;
 
 import org.junit.Test;
+import org.repoanalyzer.reporeader.author.Author;
+import org.repoanalyzer.reporeader.author.AuthorProvider;
+import org.repoanalyzer.reporeader.author.FilePreloadedAuthorProvider;
 import org.repoanalyzer.reporeader.exceptions.CannotOpenAuthorFileException;
 import org.repoanalyzer.reporeader.exceptions.InvalidJsonDataFormatException;
 import org.repoanalyzer.reporeader.exceptions.JsonParsingException;
-
-import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -32,18 +33,18 @@ public class FilePreloadedAuthorProviderTest {
     }
 
     @Test(expected = CannotOpenAuthorFileException.class)
-    public void testCannotOpenAuthorFileException() throws Exception {
+    public void cannotOpenAuthorFileExceptionTest() throws Exception {
         authorProvider = new FilePreloadedAuthorProvider("/TestAuthors1.json");
     }
 
     @Test(expected = InvalidJsonDataFormatException.class)
-    public void testInvalidJsonDataFormatException() throws Exception {
+    public void invalidJsonDataFormatExceptionTest() throws Exception {
         String testFilePath = getClass().getResource("/TestAuthorsBadFormat.json").getPath();
         authorProvider = new FilePreloadedAuthorProvider(testFilePath);
     }
 
     @Test(expected = JsonParsingException.class)
-    public void testJsonParsingException() throws Exception {
+    public void jsonParsingExceptionTest() throws Exception {
         String testFilePath = getClass().getResource("/TestAuthorsNotJson.json").getPath();
         authorProvider = new FilePreloadedAuthorProvider(testFilePath);
     }

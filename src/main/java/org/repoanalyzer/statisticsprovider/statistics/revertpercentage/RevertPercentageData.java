@@ -1,7 +1,7 @@
 package org.repoanalyzer.statisticsprovider.statistics.revertpercentage;
 
 
-import org.repoanalyzer.reporeader.commit.Author;
+import org.repoanalyzer.reporeader.author.Author;
 
 public class RevertPercentageData {
     private Author author;

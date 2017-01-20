@@ -3,6 +3,7 @@ package org.repoanalyzer.reporeader.commit;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
+import org.repoanalyzer.reporeader.author.Author;
 
 import static org.junit.Assert.assertEquals;
 

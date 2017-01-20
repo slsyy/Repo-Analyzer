@@ -2,7 +2,7 @@ package org.repoanalyzer.statisticsprovider.statistics.commitsgenerator;
 
 
 import org.joda.time.DateTime;
-import org.repoanalyzer.reporeader.commit.AuthorProvider;
+import org.repoanalyzer.reporeader.author.AuthorProvider;
 import org.repoanalyzer.reporeader.commit.Commit;
 import org.repoanalyzer.reporeader.commit.CommitBuilder;
 import org.repoanalyzer.reporeader.exceptions.IncompleteCommitInfoException;

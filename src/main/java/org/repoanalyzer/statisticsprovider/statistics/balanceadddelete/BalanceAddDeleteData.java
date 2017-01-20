@@ -1,6 +1,6 @@
 package org.repoanalyzer.statisticsprovider.statistics.balanceadddelete;
 
-import org.repoanalyzer.reporeader.commit.Author;
+import org.repoanalyzer.reporeader.author.Author;
 
 /**
  * Created by Jakub on 2016-12-18.

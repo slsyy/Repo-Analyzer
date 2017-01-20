@@ -1,6 +1,6 @@
 package org.repoanalyzer.statisticsprovider.statistics.balanceadddelete;
 
-import org.repoanalyzer.reporeader.commit.Author;
+import org.repoanalyzer.reporeader.author.Author;
 import org.repoanalyzer.reporeader.commit.Commit;
 
 import java.util.ArrayList;

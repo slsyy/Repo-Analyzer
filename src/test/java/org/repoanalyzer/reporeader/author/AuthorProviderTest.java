@@ -1,7 +1,9 @@
-package org.repoanalyzer.reporeader.commit;
+package org.repoanalyzer.reporeader.author;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.repoanalyzer.reporeader.author.Author;
+import org.repoanalyzer.reporeader.author.AuthorProvider;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

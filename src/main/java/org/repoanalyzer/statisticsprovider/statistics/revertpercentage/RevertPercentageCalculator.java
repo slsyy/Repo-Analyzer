@@ -1,11 +1,10 @@
 package org.repoanalyzer.statisticsprovider.statistics.revertpercentage;
 
 
-import org.repoanalyzer.reporeader.commit.Author;
+import org.repoanalyzer.reporeader.author.Author;
 import org.repoanalyzer.reporeader.commit.Commit;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 

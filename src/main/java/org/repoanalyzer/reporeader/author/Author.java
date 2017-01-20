@@ -1,6 +1,7 @@
-package org.repoanalyzer.reporeader.commit;
+package org.repoanalyzer.reporeader.author;
 
 import com.google.common.collect.ImmutableList;
+import org.repoanalyzer.reporeader.commit.Commit;
 
 import java.util.LinkedList;
 import java.util.List;

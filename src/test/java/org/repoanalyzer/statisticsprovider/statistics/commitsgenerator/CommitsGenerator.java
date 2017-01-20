@@ -1,7 +1,7 @@
 package org.repoanalyzer.statisticsprovider.statistics.commitsgenerator;
 
-import org.repoanalyzer.reporeader.commit.Author;
-import org.repoanalyzer.reporeader.commit.AuthorProvider;
+import org.repoanalyzer.reporeader.author.Author;
+import org.repoanalyzer.reporeader.author.AuthorProvider;
 import org.repoanalyzer.reporeader.commit.Commit;
 
 import java.util.*;

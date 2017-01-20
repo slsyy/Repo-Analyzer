@@ -7,7 +7,9 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.repoanalyzer.reporeader.IRepoReader;
 import org.repoanalyzer.reporeader.RepoReaderFactory;
-import org.repoanalyzer.reporeader.commit.Author;
+import org.repoanalyzer.reporeader.author.Author;
+import org.repoanalyzer.reporeader.author.AuthorProvider;
+import org.repoanalyzer.reporeader.author.FilePreloadedAuthorProvider;
 import org.repoanalyzer.reporeader.exceptions.CannotOpenAuthorFileException;
 import org.repoanalyzer.reporeader.exceptions.InvalidJsonDataFormatException;
 import org.repoanalyzer.reporeader.exceptions.JsonParsingException;
@@ -25,7 +27,6 @@ import org.repoanalyzer.statisticsprovider.view.RepoReaderProgressBarView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -43,8 +44,8 @@ public class StatisticsController extends Application {
         new RepoPathReaderView(this).showStage(new Stage());
     }
 
-    public void createStatisticsView(String url, String authorFile){
-        repoReader = RepoReaderFactory.create(url, authorFile);
+    public void createStatisticsView(String url, String authorFile) throws RepositoryNotFoundOrInvalidException {
+        repoReader = RepoReaderFactory.create(url, prepareAuthorProvider(authorFile));
 
         Task<List<Commit>> task = new Task<List<Commit>>() {
             @Override
@@ -110,5 +111,17 @@ public class StatisticsController extends Application {
 
         statisticsComponents.forEach(IStatisticsComponent::createAndShowStatisticsView);
 
+    }
+
+    protected AuthorProvider prepareAuthorProvider(String authorFile) {
+        if (authorFile == "") return  new AuthorProvider();
+
+        try {
+            return new FilePreloadedAuthorProvider(authorFile);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Ignoring provided file with authors.");
+            return new AuthorProvider();
+        }
     }
 }

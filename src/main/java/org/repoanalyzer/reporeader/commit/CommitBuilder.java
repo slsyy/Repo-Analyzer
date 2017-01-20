@@ -1,6 +1,8 @@
 package org.repoanalyzer.reporeader.commit;
 
 import org.joda.time.DateTime;
+import org.repoanalyzer.reporeader.author.Author;
+import org.repoanalyzer.reporeader.author.AuthorProvider;
 import org.repoanalyzer.reporeader.exceptions.IncompleteCommitInfoException;
 
 public class CommitBuilder {

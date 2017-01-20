@@ -5,6 +5,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -13,6 +14,7 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.repoanalyzer.reporeader.exceptions.RepositoryNotFoundOrInvalidException;
 import org.repoanalyzer.statisticsprovider.StatisticsController;
 
 import java.io.File;
@@ -70,8 +72,12 @@ public class RepoPathReaderView {
             try {
                 controller.createStatisticsView(url, authorFile);
                 stage.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (RepositoryNotFoundOrInvalidException e) {
+                stage.close();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Something... something got broken and I couldn't be heard...");
+                alert.setHeaderText(e.getMessage());
+                alert.showAndWait();
             }
         });
 

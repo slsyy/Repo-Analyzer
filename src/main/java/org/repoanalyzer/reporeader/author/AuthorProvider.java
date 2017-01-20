@@ -1,6 +1,7 @@
-package org.repoanalyzer.reporeader.commit;
+package org.repoanalyzer.reporeader.author;
 
 import com.google.common.collect.ImmutableSet;
+import org.repoanalyzer.reporeader.author.Author;
 import org.repoanalyzer.reporeader.exceptions.AuthorNotFoundException;
 
 import java.util.HashSet;
