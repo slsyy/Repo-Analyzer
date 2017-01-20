@@ -1,13 +1,14 @@
 package org.repoanalyzer.reporeader.author.authorfileparser;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.repoanalyzer.reporeader.author.Author;
 import org.repoanalyzer.reporeader.exceptions.CannotOpenAuthorFileException;
 import org.repoanalyzer.reporeader.exceptions.InvalidJsonDataFormatException;
 import org.repoanalyzer.reporeader.exceptions.JsonParsingException;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.Reader;

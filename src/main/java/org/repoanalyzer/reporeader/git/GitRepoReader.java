@@ -2,15 +2,9 @@ package org.repoanalyzer.reporeader.git;
 
 import org.repoanalyzer.reporeader.AbstractRepoReader;
 import org.repoanalyzer.reporeader.author.AuthorProvider;
-import org.repoanalyzer.reporeader.commit.*;
+import org.repoanalyzer.reporeader.commit.Commit;
+import org.repoanalyzer.reporeader.commit.CommitBuilder;
 import org.repoanalyzer.reporeader.exceptions.*;
-
-
-import java.io.File;
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.*;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -24,6 +18,14 @@ import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 
 import org.joda.time.DateTime;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class GitRepoReader extends AbstractRepoReader {
     private Git git;

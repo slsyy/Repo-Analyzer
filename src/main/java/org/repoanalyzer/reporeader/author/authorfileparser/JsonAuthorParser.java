@@ -1,9 +1,10 @@
 package org.repoanalyzer.reporeader.author.authorfileparser;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.repoanalyzer.reporeader.author.Author;
 import org.repoanalyzer.reporeader.exceptions.InvalidJsonDataFormatException;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class JsonAuthorParser {
     public JsonAuthorParser() {}

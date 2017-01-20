@@ -1,9 +1,6 @@
 package org.repoanalyzer.reporeader.author;
 
 import org.junit.Test;
-import org.repoanalyzer.reporeader.author.Author;
-import org.repoanalyzer.reporeader.author.AuthorProvider;
-import org.repoanalyzer.reporeader.author.FilePreloadedAuthorProvider;
 import org.repoanalyzer.reporeader.exceptions.CannotOpenAuthorFileException;
 import org.repoanalyzer.reporeader.exceptions.InvalidJsonDataFormatException;
 import org.repoanalyzer.reporeader.exceptions.JsonParsingException;
@@ -28,8 +25,8 @@ public class FilePreloadedAuthorProviderTest {
 
         //then
         assertEquals(authorProvider.getAuthorsNumber(), 2);
-        assertTrue(authorProvider.containsAuthor(author1));
-        assertTrue(authorProvider.containsAuthor(author2));
+        assertTrue(authorProvider.doesAuthorExistInList(author1));
+        assertTrue(authorProvider.doesAuthorExistInList(author2));
     }
 
     @Test(expected = CannotOpenAuthorFileException.class)

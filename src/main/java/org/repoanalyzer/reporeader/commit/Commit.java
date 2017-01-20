@@ -1,7 +1,8 @@
 package org.repoanalyzer.reporeader.commit;
 
-import org.joda.time.DateTime;
 import org.repoanalyzer.reporeader.author.Author;
+
+import org.joda.time.DateTime;
 
 final public class Commit {
 

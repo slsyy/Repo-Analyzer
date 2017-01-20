@@ -1,7 +1,8 @@
 package org.repoanalyzer.reporeader.author;
 
-import com.google.common.collect.ImmutableList;
 import org.repoanalyzer.reporeader.commit.Commit;
+
+import com.google.common.collect.ImmutableList;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -68,12 +69,11 @@ public class Author {
 
     @Override
     public boolean equals(Object other) {
-        boolean result = false;
         if (other instanceof Author) {
             Author that = (Author) other;
-            result = (this.names.equals(that.names) && this.emails.equals(that.emails));
+            return (this.names.equals(that.names) && this.emails.equals(that.emails));
         }
-        return result;
+        return false;
     }
 
     @Override

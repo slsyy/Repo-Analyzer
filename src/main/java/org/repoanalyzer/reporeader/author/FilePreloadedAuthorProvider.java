@@ -16,9 +16,9 @@ public class FilePreloadedAuthorProvider extends AuthorProvider {
 
     private void addAuthorsFromFile(String authorFile) throws CannotOpenAuthorFileException,
             InvalidJsonDataFormatException, JsonParsingException {
-        AuthorFileParser fileParser = new AuthorFileParser();
+        AuthorFileParser authorFileParser = new AuthorFileParser();
         try {
-            this.authors = fileParser.parse(new FileReader(authorFile));
+            this.authors = authorFileParser.parse(new FileReader(authorFile));
         } catch (IOException e) {
             throw new CannotOpenAuthorFileException();
         }
