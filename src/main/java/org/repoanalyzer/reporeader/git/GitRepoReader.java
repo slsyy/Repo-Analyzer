@@ -13,14 +13,11 @@ import java.util.List;
 import java.util.concurrent.*;
 
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.filter.RevFilter;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.AbstractTreeIterator;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.EmptyTreeIterator;
@@ -32,16 +29,18 @@ public class GitRepoReader extends AbstractRepoReader {
     private Git git;
 
     public GitRepoReader(String url, AuthorProvider authorProvider) {
-        super(new File(url, "").toString(), authorProvider);
+        super(url, authorProvider);
     }
 
     public Future<List<Commit>> getCommits() throws RepositoryNotFoundOrInvalidException,
                                                     JsonParsingException,
                                                     CannotOpenAuthorFileException,
                                                     InvalidJsonDataFormatException {
-        this.git = this.buildGitRepository();
+        GitRepoBuilder gitRepoBuilder = new GitRepoBuilder(this.url);
+        this.git = gitRepoBuilder.build();
 
-        List<RevCommit> commits = this.getRevCommitsFromRepository();
+        GitRevCommitsExtractor gitRevCommitsExtractor = new GitRevCommitsExtractor(this.git);
+        List<RevCommit> commits = gitRevCommitsExtractor.getListOfRevCommitsFromRepository();
         this.size = commits.size();
 
         Callable<List<Commit>> task = () -> this.analyzeCommits(commits);
@@ -51,33 +50,6 @@ public class GitRepoReader extends AbstractRepoReader {
         executor.shutdown();
 
         return future;
-    }
-
-    private Git buildGitRepository() throws RepositoryNotFoundOrInvalidException {
-        FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        builder.setGitDir(new File(this.url))
-               .readEnvironment()
-               .findGitDir();
-        try {
-            return new Git(builder.build());
-        } catch (IOException exception) {
-            throw new RepositoryNotFoundOrInvalidException();
-        }
-    }
-
-    private List<RevCommit> getRevCommitsFromRepository() throws RepositoryNotFoundOrInvalidException {
-        Iterable<RevCommit> iterableCommits;
-        try {
-            iterableCommits = this.git.log().setRevFilter(RevFilter.NO_MERGES).call();
-        } catch (GitAPIException exception) {
-            throw new RepositoryNotFoundOrInvalidException();
-        }
-
-        List<RevCommit> commits = new LinkedList<>();
-        for (RevCommit commit : iterableCommits)
-            commits.add(commit);
-
-        return commits;
     }
 
     private List<Commit> analyzeCommits(final List<RevCommit> commits)
