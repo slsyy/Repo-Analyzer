@@ -70,9 +70,6 @@ public class CommitBuilder {
         if (this.message == null) throw new IncompleteCommitInfoException("Missing commit message.");
         if (this.sha == null) throw new IncompleteCommitInfoException("Missing commit hashCode.");
         if (this.dateTime == null) throw new IncompleteCommitInfoException("Missing commit date.");
-        if (this.deletedLinesNumber == 0 &&
-            this.addedLinesNumber ==  0 &&
-            this.changedLinesNumber == 0) throw new IncompleteCommitInfoException("Commit must introduce changes. Missing oommit changes.");
 
         Commit commit = new Commit(this.sha, author, this.dateTime, this.message, this.deletedLinesNumber, this.addedLinesNumber, this.changedLinesNumber);
         author.addCommit(commit);

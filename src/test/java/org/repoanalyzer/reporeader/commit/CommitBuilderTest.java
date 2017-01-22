@@ -125,23 +125,4 @@ public class CommitBuilderTest {
                 .setChangedLinesNumber(changedLinesNumber)
                 .createCommit();
     }
-
-    @Test(expected = IncompleteCommitInfoException.class)
-    public void createInvalidCommitWithoutLaneChangeTest() throws Exception {
-        //given
-        this.deletedLinesNumber = 0;
-        this.addedLinesNumber = 0;
-        this.changedLinesNumber = 0;
-
-        //when
-        commitBuilder.setAuthorName(name)
-                .setAuthorEmail(mail)
-                .setSHA(sha)
-                .setDateTime(date)
-                .setMessage(message)
-                .setAddedLinesNumber(addedLinesNumber)
-                .setDeletedLinesNumber(deletedLinesNumber)
-                .setChangedLinesNumber(changedLinesNumber)
-                .createCommit();
-    }
 }

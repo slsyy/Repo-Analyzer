@@ -42,7 +42,7 @@ public class RepoReaderTaskController {
     }
 
     private AuthorProvider prepareAuthorProvider(String authorFile) {
-        if (authorFile == "") return  new AuthorProvider();
+        if (authorFile.isEmpty()) return  new AuthorProvider();
 
         try {
             return new FilePreloadedAuthorProvider(authorFile);
