@@ -19,9 +19,9 @@ public class CommitsPerHourCalculator {
                 result.putEmptyData(day,i);
         Days day = null;
         for(Commit commit : commits){
-            Integer hour  = commit.getDateTime().getHourOfDay();
-            day=Days.fromDateTime(commit.getDateTime().getDayOfWeek());
-            result.incrementCommits(day,hour);
+            int hour = commit.getDateTime().getHourOfDay();
+            day = Days.fromDateTime(commit.getDateTime().getDayOfWeek());
+            result.incrementCommits(day, hour);
         }
 
         for(Integer value : result.getAllValues())

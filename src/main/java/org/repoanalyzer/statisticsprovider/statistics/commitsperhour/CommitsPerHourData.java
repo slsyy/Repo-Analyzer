@@ -13,15 +13,9 @@ public class CommitsPerHourData {
     private Table<Days, Integer, Integer> data = HashBasedTable.create();
 
 
-
-    private Integer numOfCommits = 0;
-    private Integer maxCommitsPerDay = 0;
+    private int maxCommitsPerDay = 0;
 
     public CommitsPerHourData() {
-    }
-
-    public Integer getNumOfCommits() {
-        return numOfCommits;
     }
 
     public void incrementCommits(Days day, Integer hour){
@@ -30,20 +24,20 @@ public class CommitsPerHourData {
         data.put(day,hour,oldValue+1);
     }
 
-    public Integer getMaxCommitsPerDay() {
+    public int getMaxCommitsPerDay() {
         return maxCommitsPerDay;
     }
 
-    public void trySetMaxCommitsPerDay(Integer maxCommitsPerDay) {
+    public void trySetMaxCommitsPerDay(int maxCommitsPerDay) {
         if(maxCommitsPerDay>this.maxCommitsPerDay)
             this.maxCommitsPerDay = maxCommitsPerDay;
     }
 
-    public void putEmptyData(Days day, Integer hour){
+    public void putEmptyData(Days day, int hour){
         data.put(day,hour,0);
     }
 
-    public Integer getDataPerDayAndHour(Days day, Integer hour){
+    public int getDataPerDayAndHour(Days day, int hour){
         return data.get(day,hour);
     }
 
