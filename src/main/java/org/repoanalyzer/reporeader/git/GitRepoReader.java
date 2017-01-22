@@ -29,17 +29,18 @@ import java.util.concurrent.Future;
 
 public class GitRepoReader extends AbstractRepoReader {
     private Git git;
+    private GitRepoBuilder gitRepoBuilder;
 
     public GitRepoReader(String url, AuthorProvider authorProvider) {
         super(url, authorProvider);
+        this.gitRepoBuilder = new GitRepoBuilder(this.url);
     }
 
     public Future<List<Commit>> getCommits() throws RepositoryNotFoundOrInvalidException,
                                                     JsonParsingException,
                                                     CannotOpenAuthorFileException,
                                                     InvalidJsonDataFormatException {
-        GitRepoBuilder gitRepoBuilder = new GitRepoBuilder(this.url);
-        this.git = gitRepoBuilder.build();
+        this.git = this.gitRepoBuilder.build();
 
         GitRevCommitsExtractor gitRevCommitsExtractor = new GitRevCommitsExtractor(this.git);
         List<RevCommit> commits = gitRevCommitsExtractor.getListOfRevCommitsFromRepository();

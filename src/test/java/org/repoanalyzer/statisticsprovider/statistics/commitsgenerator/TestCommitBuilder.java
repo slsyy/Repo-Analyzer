@@ -14,11 +14,11 @@ public class TestCommitBuilder {
     private  String authorName = "DefaultAuthor";
     private  String authorEmail = "aa@bb.cc";
     private  String sha = "123";
-    private  DateTime dateTime = new DateTime(1);
+    private  DateTime dateTime = new DateTime(0);
     private  String message = "ExampleMessage";
-    private int deletedLinesNumber;
-    private int addedLinesNumber;
-    private int changedLinesNumber;
+    private int deletedLinesNumber = 1;
+    private int addedLinesNumber = 1;
+    private int changedLinesNumber = 1;
 
     public TestCommitBuilder(AuthorProvider authorProvider){
         this.authorProvider = authorProvider;

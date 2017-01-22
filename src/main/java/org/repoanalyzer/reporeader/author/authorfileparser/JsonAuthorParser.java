@@ -12,9 +12,11 @@ public class JsonAuthorParser {
     public Author parse(JSONObject jsonAuthor) throws InvalidJsonDataFormatException {
         if (jsonAuthor.keySet().size() != 1) throw new InvalidJsonDataFormatException();
 
-        String authorName = (String) jsonAuthor.keySet().toArray()[0];
-        Object objectAuthorMails = jsonAuthor.get(authorName);
+        Object objectAuthorName = jsonAuthor.keySet().toArray()[0];
+        if (!(objectAuthorName instanceof String)) throw new InvalidJsonDataFormatException();
 
+        String authorName = (String) objectAuthorName;
+        Object objectAuthorMails = jsonAuthor.get(authorName);
         if (!(objectAuthorMails instanceof JSONArray)) throw new InvalidJsonDataFormatException();
 
         AuthorFromJsonBuilder authorBuilder = new AuthorFromJsonBuilder(authorName);

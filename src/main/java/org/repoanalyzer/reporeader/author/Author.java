@@ -75,9 +75,4 @@ public class Author {
         }
         return false;
     }
-
-    @Override
-    public String toString(){
-        return this.names.toString() + ":" + this.emails.toString();
-    }
 }

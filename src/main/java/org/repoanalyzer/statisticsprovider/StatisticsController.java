@@ -10,10 +10,7 @@ import org.repoanalyzer.reporeader.RepoReaderFactory;
 import org.repoanalyzer.reporeader.author.Author;
 import org.repoanalyzer.reporeader.author.AuthorProvider;
 import org.repoanalyzer.reporeader.author.FilePreloadedAuthorProvider;
-import org.repoanalyzer.reporeader.exceptions.CannotOpenAuthorFileException;
-import org.repoanalyzer.reporeader.exceptions.InvalidJsonDataFormatException;
-import org.repoanalyzer.reporeader.exceptions.JsonParsingException;
-import org.repoanalyzer.reporeader.exceptions.RepositoryNotFoundOrInvalidException;
+import org.repoanalyzer.reporeader.exceptions.*;
 import org.repoanalyzer.reporeader.commit.Commit;
 import org.repoanalyzer.statisticsprovider.statistics.*;
 import org.repoanalyzer.statisticsprovider.statistics.averages.AveragesComponent;
@@ -44,8 +41,10 @@ public class StatisticsController extends Application {
         new RepoPathReaderView(this).showStage(new Stage());
     }
 
-    public void createStatisticsView(String url, String authorFile) throws RepositoryNotFoundOrInvalidException {
-        repoReader = RepoReaderFactory.create(url, prepareAuthorProvider(authorFile));
+    public void createStatisticsView(String url, String authorFile)
+            throws RepositoryNotFoundOrInvalidException, AuthorProviderMustExistsException {
+        RepoReaderFactory repoReaderFactory = new RepoReaderFactory();
+        repoReader = repoReaderFactory.create(url, prepareAuthorProvider(authorFile));
 
         Task<List<Commit>> task = new Task<List<Commit>>() {
             @Override

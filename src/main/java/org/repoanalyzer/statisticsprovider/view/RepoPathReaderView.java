@@ -9,16 +9,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.repoanalyzer.reporeader.exceptions.RepositoryNotFoundOrInvalidException;
 import org.repoanalyzer.statisticsprovider.StatisticsController;
 
 import java.io.File;
-import java.util.Optional;
 
 public class RepoPathReaderView {
     public static final int LONG_FIELD_WIDTH = 500;
@@ -72,7 +69,7 @@ public class RepoPathReaderView {
             try {
                 controller.createStatisticsView(url, authorFile);
                 stage.close();
-            } catch (RepositoryNotFoundOrInvalidException e) {
+            } catch (Exception e) {
                 stage.close();
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Something... something got broken and I couldn't be heard...");

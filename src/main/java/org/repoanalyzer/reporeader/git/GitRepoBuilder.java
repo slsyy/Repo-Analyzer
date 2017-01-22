@@ -18,6 +18,7 @@ public class GitRepoBuilder {
     public Git build() throws RepositoryNotFoundOrInvalidException {
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         builder.setGitDir(new File(this.url))
+                .setMustExist(true)
                 .readEnvironment()
                 .findGitDir();
         try {

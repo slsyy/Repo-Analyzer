@@ -51,17 +51,4 @@ final public class Commit {
     public int getChangedLinesNumber() {
         return this.changedLinesNumber;
     }
-
-    @Override
-    public String toString() {
-        return "Commit{" +
-                "hashCode='" + this.sha + '\'' +
-                ", author=" + this.author.getFirstName() +
-                ", dateTime=" + this.dateTime +
-                ", message='" + this.message + '\'' +
-                ", deletedLinesNumber=" + this.deletedLinesNumber +
-                ", addedLinesNumber=" + this.addedLinesNumber +
-                ", changedLinesNumber=" + this.changedLinesNumber +
-                '}';
-    }
 }
