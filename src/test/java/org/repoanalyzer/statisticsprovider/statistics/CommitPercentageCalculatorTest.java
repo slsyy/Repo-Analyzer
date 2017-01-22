@@ -68,7 +68,7 @@ public class CommitPercentageCalculatorTest {
     }
 
     @Test
-    public void generateDataCommitPercentageCalculator() throws Exception {
+    public void commitPercentageCalculatorTest() throws Exception {
         CommitPercentageCalculator commitPercentageCalculator = new CommitPercentageCalculator(authors);
         List<CommitPercentageData> dataList = commitPercentageCalculator.generateData();
 

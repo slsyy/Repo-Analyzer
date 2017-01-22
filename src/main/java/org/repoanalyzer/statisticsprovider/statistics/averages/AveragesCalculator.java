@@ -21,9 +21,9 @@ public class AveragesCalculator {
         List<AveragesData> result = new ArrayList<>();
 
         for(Author author : authors){
-            Integer sumAddedLines = 0;
-            Integer sumDeletedLines = 0;
-            Integer sumChangedLines = 0;
+            int sumAddedLines = 0;
+            int sumDeletedLines = 0;
+            int sumChangedLines = 0;
 
             for(Commit commit : author.getCommits()){
                 sumAddedLines += commit.getAddedLinesNumber();

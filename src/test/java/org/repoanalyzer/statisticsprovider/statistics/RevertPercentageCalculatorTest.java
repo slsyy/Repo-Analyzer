@@ -72,7 +72,7 @@ public class RevertPercentageCalculatorTest {
     }
 
     @Test
-    public void generateDataRevertPercentageCalculator() throws Exception {
+    public void revertPercentageCalculatorTest() throws Exception {
 
         RevertPercentageCalculator revertPercentageCalculator = new RevertPercentageCalculator(authors);
         List<RevertPercentageData> dataList = revertPercentageCalculator.generateStatistics();

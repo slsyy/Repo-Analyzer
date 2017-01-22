@@ -1,11 +1,13 @@
 package org.repoanalyzer.statisticsprovider.statistics.changes;
 
+import org.repoanalyzer.reporeader.author.Author;
+
 /**
  * Created by Jakub on 2017-01-14.
  */
 public class ChangesData {
     private String authorName;
-    private Integer changes;
+    private int changes;
 
     public ChangesData(String authorName) {
         this.authorName = authorName;
