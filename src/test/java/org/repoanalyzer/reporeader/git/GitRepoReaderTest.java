@@ -10,10 +10,10 @@ import java.util.Set;
 import static junit.framework.TestCase.assertEquals;
 
 public class GitRepoReaderTest {
-    @Test
-    public void getCommitsTest() throws Exception {
-        //TODO: MOCKS!
-    }
+//TODO: Try to mock it, but it may be hard to test GitRepoReader:getCommits()
+//    @Test
+//    public void getCommitsTest() throws Exception {
+//    }
 
     @Test
     public void getProgressTest() throws Exception {

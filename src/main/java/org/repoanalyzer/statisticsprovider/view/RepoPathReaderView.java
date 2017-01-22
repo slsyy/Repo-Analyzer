@@ -13,16 +13,16 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.repoanalyzer.statisticsprovider.StatisticsController;
+import org.repoanalyzer.statisticsprovider.controllers.RepoReaderTaskController;
 
 import java.io.File;
 
 public class RepoPathReaderView {
     public static final int LONG_FIELD_WIDTH = 500;
-    private StatisticsController controller;
+    private RepoReaderTaskController repoReaderTaskController;
 
-    public RepoPathReaderView(StatisticsController controller){
-        this.controller = controller;
+    public RepoPathReaderView(RepoReaderTaskController repoReaderTaskController){
+        this.repoReaderTaskController = repoReaderTaskController;
     }
 
     public void showStage(Stage stage){
@@ -67,7 +67,7 @@ public class RepoPathReaderView {
             String authorFile = authorListText.getText();
 
             try {
-                controller.createStatisticsView(url, authorFile);
+                repoReaderTaskController.runRepoReaderTask(url, authorFile);
                 stage.close();
             } catch (Exception e) {
                 stage.close();
