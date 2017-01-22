@@ -80,6 +80,6 @@ public class AuthorProviderTest {
         //when
 
         //then
-        assertFalse(authorProvider.doesAuthorExistsInList(expected));
+        assertFalse(authorProvider.doesAuthorExistInList(expected));
     }
 }
