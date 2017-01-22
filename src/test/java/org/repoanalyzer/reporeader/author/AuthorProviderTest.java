@@ -2,10 +2,9 @@ package org.repoanalyzer.reporeader.author;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.repoanalyzer.reporeader.author.Author;
-import org.repoanalyzer.reporeader.author.AuthorProvider;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class AuthorProviderTest {
@@ -13,7 +12,7 @@ public class AuthorProviderTest {
     private Author author;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         authorProvider = new AuthorProvider();
     }
 
@@ -41,7 +40,7 @@ public class AuthorProviderTest {
         String mail2 = "email2";
 
         //when
-        author = authorProvider.getCreateOrUpdateAuthor(name, mail1);
+        authorProvider.getCreateOrUpdateAuthor(name, mail1);
         author = authorProvider.getCreateOrUpdateAuthor(name, mail2);
 
         //then
@@ -69,5 +68,18 @@ public class AuthorProviderTest {
         assertTrue(author.containsName(name2));
         assertEquals(author.getEmailsNumber(), 1);
         assertTrue(author.containsEmail(mail));
+    }
+
+    @Test
+    public void checkIfAuthorProviderContainsAuthorBeforeCreationTest() throws Exception {
+        //given
+        String name = "name";
+        String mail = "email";
+        Author expected = new Author(name, mail);
+
+        //when
+
+        //then
+        assertFalse(authorProvider.doesAuthorExistsInList(expected));
     }
 }

@@ -25,8 +25,8 @@ public class FilePreloadedAuthorProviderTest {
 
         //then
         assertEquals(authorProvider.getAuthorsNumber(), 2);
-        assertTrue(authorProvider.doesAuthorExistInList(author1));
-        assertTrue(authorProvider.doesAuthorExistInList(author2));
+        assertTrue(authorProvider.doesAuthorExistsInList(author1));
+        assertTrue(authorProvider.doesAuthorExistsInList(author2));
     }
 
     @Test(expected = CannotOpenAuthorFileException.class)
